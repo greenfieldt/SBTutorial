@@ -1,0 +1,24 @@
+Angular Notes -*- mode: Org -*-
+#+STARTUP: showall
+
+* Section 1 -- start a new project
+Our first step will be to start a new angular project.  For this
+project we will not use angular routing and we will select SCSS as our
+styling engine.  
+
+- ng new storybook
+  (do not enable angular routing)
+  (select SCSS)
+  Test the install by using 
+  ng serve
+  (navigate to localhost:4200)
+
+
+Our second step is to install StoryBook.  StoryBook has a QuickStart
+guide and a StorbyBook for Angular guide.  The quick start guide
+advises you to use install the storybook cli and then use sb init.
+Many people people have had problems with that when installing
+storybook on ongoing problems.  But let's just give it a try since our
+project is brand new
+- npx -p @storybook/cli sb init
+  we can see that sb init was able to detect we are using Angular
