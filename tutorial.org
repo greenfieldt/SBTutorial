@@ -1,7 +1,7 @@
 Angular Notes -*- mode: Org -*-
 #+STARTUP: showall
 
-* Section 1 -- start a new project
+* Step 1 -- start a new project
 Our first step will be to start a new angular project.  For this
 project we will not use angular routing and we will select SCSS as our
 styling engine.  
@@ -14,6 +14,7 @@ styling engine.
   (navigate to localhost:4200)
 
 
+* Step 2 -- install Storybook
 Our second step is to install StoryBook.  StoryBook has a QuickStart
 guide and a StorbyBook for Angular guide.  The quick start guide
 advises you to use install the storybook cli and then use sb init.
@@ -22,3 +23,22 @@ storybook on ongoing problems.  But let's just give it a try since our
 project is brand new
 - npx -p @storybook/cli sb init
   we can see that sb init was able to detect we are using Angular
+
+Let's see what changed
+
+Storybook updated Package.JSON
+It added a storybook script to start storybook on port 6006
+It added a bild storybook script 
+It added @babel/core, babel-loader,
+@storybook/[angular|addon-notes|addon-actions|addon-links|addons]
+
+Storybook created new directory called stories and addead a default
+story to it (src/stories/index.stories.ts)
+
+Storybook modified your tsconfig.app.json and added **/*.stores.ts to
+the excludes array
+
+Storybook created a .storybook/config.js file that controls what
+stories get loaded
+
+Storybook created a .storybook/addons.js file that does something?
