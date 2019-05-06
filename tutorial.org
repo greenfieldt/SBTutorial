@@ -21,6 +21,10 @@ advises you to use install the storybook cli and then use sb init.
 Many people people have had problems with that when installing
 storybook on ongoing problems.  But let's just give it a try since our
 project is brand new
+
+(a little aside on npx -- it allows you to run commands that you don't
+use very much with out install the softare)
+
 - npx -p @storybook/cli sb init
   we can see that sb init was able to detect we are using Angular
 
@@ -42,3 +46,17 @@ Storybook created a .storybook/config.js file that controls what
 stories get loaded
 
 Storybook created a .storybook/addons.js file that does something?
+
+
+* Step 3 -- What's an Addon?
+Addons allow you to increase the capabilities of Storybook.  One of
+the most popular addons is known as Knob and it allow you to fiddle
+with the state that you pass into (mainly react components).  I
+haven't used that one so much but I do use the ViewPort addon so I can
+be "mobile first"
+
+- npm i --save-dev @storybook/addon-viewport
+
+- edit .storybook/addons.js and add
+  import '@storybook/addon-viewport/register';
+
