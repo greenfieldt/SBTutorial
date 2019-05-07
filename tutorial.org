@@ -1,10 +1,13 @@
 Storybook Tutorial Notes -*- mode: Org -*-
 #+STARTUP: showall
 
-* StoryBook and Angular Basics
+* Component Driven Development using StoryBook and Angular
 In this tutorial we will make a simple Angular App that downloads an
 infinite list of News Articles from the NewsAPI.org website and
-displays them as a lazyloaded infinite list in Angular.
+displays them as a lazyloaded infinite list in Angular.  We will use
+StoryBook to develop this App in a CDD methodology.
+
+
 Technologies (StoryBook, Angular, NGXS, Angular Material)
 
 * Step 1 -- Create a New Angular Project
