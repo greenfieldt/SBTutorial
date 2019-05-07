@@ -16,7 +16,6 @@ export class ArticlesLoaded {
     constructor() { }
 }
 
-
 export class GetMoreArticles {
     static readonly type = '[News] Get more articles from server';
     constructor() { }
@@ -41,7 +40,6 @@ export class ShowArticle {
     static readonly type = '[News] Show an article';
     constructor(public payload: NewsArticle) { }
 }
-
 
 export class ChangeNewsSource {
     static readonly type = '[News] Change the News Source the newsFeed is looking at';

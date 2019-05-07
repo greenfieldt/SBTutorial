@@ -1,15 +1,3 @@
-/*
-export class NewsArticle {
-    sourceImage: string = "";
-    title: string = "";
-    subTitle: string = "";
-    description: string = "";
-    articleImage: string = "";
-    articleURL: string = "";
-
-}
-*/
-
 export class Source {
     id: string = "";
     name: string = "";

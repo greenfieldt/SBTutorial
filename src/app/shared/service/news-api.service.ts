@@ -7,12 +7,7 @@ import { NewsArticle } from '../model/news-article';
 import { NewsSource } from '../model/news-source';
 import * as CryptoJS from 'crypto-js';
 
-//greenfield@gmai.com key
-//const apiKey = '768c2adc37a143cb8688e12c40382c9f';
-//greenfit@mac.com key -- don't use 
 const apiKey = '22d9615962774038a7fda97bb5b8ca2f';
-//bane key
-//const apiKey = '24db0625418841a79826649541c0f569';
 
 
 @Injectable({
