@@ -172,7 +172,7 @@ export class NewsArticle_NewsApiV2 {
 #+END_SRC
 
 ** Use of the model
-In a component that lists news articles
+In a component that lists news articles (with a selector like: news-card-list)
 #+BEGIN_SRC typescript
     //observable of the data source
     @Select(NewsState.newsFeed) articles$: Observable<NewsArticle[]>;
@@ -211,17 +211,14 @@ import { NewsSource } from './shared/model/news-source';
 
 @Component({
     selector: 'news-app',
-    templateUrl: './app.component.html',
+    templateUrl: '<news-card-list></news-card-list>',
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
 
     title = 'news-app';
 
-    constructor(private store: Store, 
-    private overlayContainer: OverlayContainer) {
-
-    }
+    constructor(private store: Store) {}
 
     ngOnInit() {
         const newsSource = {
