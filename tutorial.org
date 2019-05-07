@@ -71,16 +71,15 @@ be "mobile first"
 ** Test the Addon
  Run StoryBook and you will see a new icon
 
-* Step 4 -- Define our component 
+* Step 4 -- Define our Data Model
 We are going to make a News Card --  This card should be responsive
 and display a news organization, a picture, a headline, and a like
 button.  If the you click in the picture then you should be taken to
-the news article
-
-and we are going to make a News List -- This will be an infinite list
+the news article and we are going to make a News List -- This will be an infinite list
 of such cards reading from the News API web service.
 
-I'll include a data service so we don't need to mess with that
+I'm going to give a super high level review of the data model so we
+have some understanding of what is happening
 
 ** Add shared/service
 - Add news-api-service.ts
@@ -88,12 +87,14 @@ Brief Explanation - This service creates a Subject that pushes News
 Articles it receives by querying the newsapi.com api
 
 #+BEGIN_SRC typescript
-        this.httpClient.get('https://newsapi.org/v2/everything?sources=' + this.newsSource.id + '&pageSize=' + pagesize + '&page=' + page + '&apiKey=' + apiKey).pipe(
+        this.httpClient.get('https://newsapi.org/v2/everything?sources=' 
+	+ this.newsSource.id + '&pageSize=' + pagesize + '&page=' + page 
+	+ '&apiKey=' + apiKey).pipe(
             map(data => data['articles']),
             map(articles => {
                 return articles.map((article) => {
                     let _na: NewsArticle = article as NewsArticle;
-		    ...
+		    ... //add some more information
                     return _na;
                 })
             }),
@@ -107,7 +108,6 @@ Articles it receives by querying the newsapi.com api
             this.resultStream.next(x);
         })
 #+END_SRC
-
 
 ** Add shared/state
 - Add news.state (NGXS state file)
@@ -135,7 +135,6 @@ newsapi.com
 - add news-article.ts
 Brief Explanation -- news-article types the news-api data structure 
 
-
 #+BEGIN_SRC typescript
 export class NewsArticle_NewsApiV2 {
     author: string = "";
@@ -148,5 +147,81 @@ export class NewsArticle_NewsApiV2 {
     urlToImage: string = ""
 }
 #+END_SRC
+
+** Use of the model
+In a component that lists news articles
+#+BEGIN_SRC typescript
+    //observable of the data source
+    @Select(NewsState.newsFeed) articles$: Observable<NewsArticle[]>;
+
+    //do something with the data and ....
+
+    //call get more actions when you need more data (like in a scrollviewport)
+        this.SICSubscription = this.scrollViewPort.scrolledIndexChange.pipe(
+            debounceTime(100),
+            tap((x) => {
+                const end = this.scrollViewPort.getRenderedRange().end;
+                const total = this.scrollViewPort.getDataLength();
+                if (end && end === total) {
+                    this.store.dispatch(new GetMoreArticles());
+                }
+            })
+        ).subscribe();
+
+#+END_SRC
+
+
+And at the end of the day you use it like this in a sample application
+#+BEGIN_SRC typescript
+
+import { Component } from '@angular/core';
+import { Store } from '@ngxs/store';
+
+
+import {
+    GetSources,
+    InitArticles,
+} from './shared/state/news.actions';
+
+import { NewsSource } from './shared/model/news-source';
+
+
+@Component({
+    selector: 'news-app',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
+})
+export class AppComponent {
+
+    title = 'news-app';
+
+    constructor(private store: Store, 
+    private overlayContainer: OverlayContainer) {
+
+    }
+
+    ngOnInit() {
+        const newsSource = {
+            category: "general",
+            country: "us",
+            description: "The New York Times: Find breaking news, multimedia, reviews & opinion on Washington, business, sports, movies, travel, books, jobs, education, real estate, cars & more at nytimes.com.",
+            id: "the-new-york-times",
+            language: "en",
+            name: "The New York Times",
+            url: "http://www.nytimes.com"
+        };
+
+        this.store.dispatch(new GetSources());
+        this.store.dispatch(new InitArticles(newsSource));
+    }
+}
+
+#+END_SRC
+
+
+* Step 5 - News Card Component
+
+Ok, we have access to all the data we could ever need so let's get
+back to StoryBook.
 
 
