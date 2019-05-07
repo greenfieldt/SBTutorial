@@ -242,6 +242,50 @@ export class AppComponent {
 * Step 5 - News Card Component
 
 Ok, we have access to all the data we could ever need so let's get
-back to StoryBook.
+back to StoryBook and try to create the situation we just talked about
+in a Component Driven Development way.
+
+** Create a new news card component 
+- ng g component newscard
+
+** Add a StoryBook story for this new component
+Before we can add a new story we have to make a decision.  StoryBook
+doesn't come configured to read stories dynamically.  As they state in
+their documentation this gets old fast.  Let's add some code to
+auto-load all the stories in one of two ways:  You can either
+put your stories at the same level as your components or in the
+src/stories folder.
+k
+
+#+BEGIN_SRC typescript
+//Option 1: load from the src/stories folder
+import { configure } from '@storybook/angular';
+
+function loadStories() {
+  const req = require.context('../stories', true, /\.stories\.ts$/);
+  req.keys().forEach(filename => req(filename));
+}
+
+configure(loadStories, module);
+#+END_SRC
+
+#+BEGIN_SRC typescript
+
+//Option 2: automatically import all files ending in *.stories.ts
+import { configure } from '@storybook/angular';
+
+const req = require.context('../src/', true, /.stories.ts$/);
+function loadStories() {
+  req.keys().forEach(filename => req(filename));
+}
+
+configure(loadStories, module);
+#+END_SRC
+
+I'm going to choose to put my stories at the same level of my
+components (Option ).
+
+
+
 
 
