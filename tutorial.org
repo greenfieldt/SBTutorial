@@ -1,7 +1,13 @@
 Storybook Tutorial Notes -*- mode: Org -*-
 #+STARTUP: showall
 
-* Step 1 -- start a new project
+* StoryBook and Angular Basics
+In this tutorial we will make a simple Angular App that downloads an
+infinite list of News Articles from the NewsAPI.org website and
+displays them as a lazyloaded infinite list in Angular.
+Technologies (StoryBook, Angular, NGXS, Angular Material)
+
+* Step 1 -- Create a New Angular Project
 Our first step will be to start a new angular project.  For this
 project we will not use angular routing and we will select SCSS as our
 styling engine.  
@@ -19,7 +25,7 @@ We are going to assume you've already done this
   (navigate to localhost:4200)
 
 
-* Step 2 -- install Storybook
+* Step 2 -- Install Storybook
 Our second step is to install StoryBook.  StoryBook has a QuickStart
 guide and a StorbyBook for Angular guide.  The quick start guide
 advises you to use install the storybook cli and then use sb init.
@@ -126,6 +132,20 @@ It exposes a NGXS state object
     }
 })
 #+END_SRC
+
+
+#+BEGIN_SRC typescript
+export class InitArticles {
+    static readonly type = '[News] Initialize a stream of articles from server';
+    constructor(public payload: NewsSource) { }
+}
+
+export class GetMoreArticles {
+    static readonly type = '[News] Get more articles from server';
+    constructor() { }
+}
+#+END_SRC
+
 
 newsFeed contains an infinite array of newsArticles obtained from
 newsapi.com 
