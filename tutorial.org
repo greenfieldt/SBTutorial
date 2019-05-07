@@ -1,4 +1,4 @@
-Angular Notes -*- mode: Org -*-
+Storybook Tutorial Notes -*- mode: Org -*-
 #+STARTUP: showall
 
 * Step 1 -- start a new project
@@ -6,11 +6,16 @@ Our first step will be to start a new angular project.  For this
 project we will not use angular routing and we will select SCSS as our
 styling engine.  
 
-- ng new storybook
+** Installing tooling
+We are going to assume you've already done this
+
+** Making a new project
+ - ng new storybook
   (do not enable angular routing)
   (select SCSS)
-  Test the install by using 
-  ng serve
+
+** Testing the install by using 
+- ng serve
   (navigate to localhost:4200)
 
 
@@ -25,6 +30,7 @@ project is brand new
 (a little aside on npx -- it allows you to run commands that you don't
 use very much with out install the softare)
 
+** Installing Storybook
 - npx -p @storybook/cli sb init
   we can see that sb init was able to detect we are using Angular
 
@@ -47,6 +53,8 @@ stories get loaded
 
 Storybook created a .storybook/addons.js file that does something?
 
+** Running Storybook
+- npm run storybook  (kind of slow at the best of times)
 
 * Step 3 -- What's an Addon?
 Addons allow you to increase the capabilities of Storybook.  One of
@@ -59,4 +67,86 @@ be "mobile first"
 
 - edit .storybook/addons.js and add
   import '@storybook/addon-viewport/register';
+
+** Test the Addon
+ Run StoryBook and you will see a new icon
+
+* Step 4 -- Define our component 
+We are going to make a News Card --  This card should be responsive
+and display a news organization, a picture, a headline, and a like
+button.  If the you click in the picture then you should be taken to
+the news article
+
+and we are going to make a News List -- This will be an infinite list
+of such cards reading from the News API web service.
+
+I'll include a data service so we don't need to mess with that
+
+** Add shared/service
+- Add news-api-service.ts
+Brief Explanation - This service creates a Subject that pushes News
+Articles it receives by querying the newsapi.com api
+
+#+BEGIN_SRC typescript
+        this.httpClient.get('https://newsapi.org/v2/everything?sources=' + this.newsSource.id + '&pageSize=' + pagesize + '&page=' + page + '&apiKey=' + apiKey).pipe(
+            map(data => data['articles']),
+            map(articles => {
+                return articles.map((article) => {
+                    let _na: NewsArticle = article as NewsArticle;
+		    ...
+                    return _na;
+                })
+            }),
+            scan((a: NewsArticle[], n: NewsArticle[]) => [...a, ...n], []),
+            first(),
+            catchError((error) => {
+                console.log("Http error", error);
+                return of(error);
+            })
+        ).subscribe((x) => {
+            this.resultStream.next(x);
+        })
+#+END_SRC
+
+
+** Add shared/state
+- Add news.state (NGXS state file)
+- Add news.actions (NGXS action definitions)
+
+Brief explanation - news.state is the controller of the system.  
+It exposes a NGXS state object 
+
+#+BEGIN_SRC typescript
+@State<NewsStateModel>({
+    name: 'news',
+    defaults: {
+        loading: true,
+        newsFeed: [],
+	...
+    }
+})
+#+END_SRC
+
+newsFeed contains an infinite array of newsArticles obtained from
+newsapi.com 
+
+
+** Add shared/model
+- add news-article.ts
+Brief Explanation -- news-article types the news-api data structure 
+
+
+#+BEGIN_SRC typescript
+export class NewsArticle_NewsApiV2 {
+    author: string = "";
+    content: string = "";
+    description: string = "";
+    publishedAt: Date;
+    source: Source;
+    title: string = "";
+    url: string = "";
+    urlToImage: string = ""
+}
+#+END_SRC
+
 
