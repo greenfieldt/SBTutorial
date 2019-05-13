@@ -1,3 +1,4 @@
+
 # Component Driven Development using StoryBook and Angular
 In this tutorial we will make a simple Angular App that downloads an
 infinite list of News Articles from the NewsAPI.org website and
@@ -7,25 +8,25 @@ StoryBook to develop this App in a CDD methodology.
 
 Technologies (StoryBook, Angular, NGXS, Angular Material)
 
-# Step 1 -- Create a New Angular Project
+## Step 1 -- Create a New Angular Project
 Our first step will be to start a new angular project.  For this
 project we will not use angular routing and we will select SCSS as our
 styling engine.  
 
-## Installing tooling
+### Installing tooling
 We are going to assume you've already done this
 
-## Making a new project
+### Making a new project
  - ng new storybook
   (do not enable angular routing)
   (select SCSS)
 
-## Testing the install by using 
+### Testing the install by using 
 - ng serve
   (navigate to localhost:4200)
 
 
-# Step 2 -- Install Storybook
+## Step 2 -- Install Storybook
 Our second step is to install StoryBook.  StoryBook has a QuickStart
 guide and a StorbyBook for Angular guide.  The quick start guide
 advises you to use install the storybook cli and then use sb init.
@@ -36,7 +37,7 @@ project is brand new
 (a little aside on npx -- it allows you to run commands that you don't
 use very much with out install the softare)
 
-## Installing Storybook
+### Installing Storybook
 - npx -p @storybook/cli sb init
   we can see that sb init was able to detect we are using Angular
 
@@ -59,10 +60,10 @@ stories get loaded
 
 Storybook created a .storybook/addons.js file that does something?
 
-## Running Storybook
+### Running Storybook
 - npm run storybook  (kind of slow at the best of times)
 
-# Step 3 -- What's an Addon?
+## Step 3 -- What's an Addon?
 Addons allow you to increase the capabilities of Storybook.  One of
 the most popular addons is known as Knob and it allow you to fiddle
 with the state that you pass into (mainly react components).  I
@@ -74,10 +75,10 @@ be "mobile first"
 - edit .storybook/addons.js and add
   import '@storybook/addon-viewport/register';
 
-## Test the Addon
+### Test the Addon
  Run StoryBook and you will see a new icon
 
-# Step 4 -- Define our Data Model
+## Step 4 -- Define our Data Model
 We are going to make a News Card --  This card should be responsive
 and display a news organization, a picture, a headline, and a like
 button.  If the you click in the picture then you should be taken to
@@ -87,8 +88,7 @@ of such cards reading from the News API web service.
 I'm going to give a super high level review of the data model so we
 have some understanding of what is happening
 
-## Add shared/service
-
+### Add shared/service
 - Add news-api-service.ts
 Brief Explanation - This service creates a Subject that pushes News
 Articles it receives by querying the newsapi.com api
@@ -114,7 +114,7 @@ Articles it receives by querying the newsapi.com api
             this.resultStream.next(x);
         })
 ```
-## Add shared/state
+### Add shared/state
 - Add news.state (NGXS state file)
 - Add news.actions (NGXS action definitions)
 
@@ -150,7 +150,7 @@ newsFeed contains an infinite array of newsArticles obtained from
 newsapi.com 
 
 
-## Add shared/model
+### Add shared/model
 - add news-article.ts
 Brief Explanation -- news-article types the news-api data structure 
 
@@ -167,7 +167,7 @@ export class NewsArticle_NewsApiV2 {
 }
 ```
 
-## Use of the model
+### Use of the model
 In a component that lists news articles (with a selector like: news-card-list)
 ``` typescript
     //observable of the data source
@@ -235,16 +235,16 @@ export class AppComponent {
 ```
 
 
-# Step 5 - News Card Component
+## Step 5 - News Card Component
 
 Ok, we have access to all the data we could ever need so let's get
 back to StoryBook and try to create the situation we just talked about
 in a Component Driven Development way.
 
-## Create a new news card component 
+### Create a new news card component 
 - ng g component newscard
 
-## Add a StoryBook story for this new component
+### Add a StoryBook story for this new component
 Before we can add a new story we have to make a decision.  StoryBook
 doesn't come configured to read stories dynamically <check this: the
 docs say it doesn't come configured but that appears to have changed>.  As they state in
@@ -315,8 +315,8 @@ called composite with a new subsection called NewsCard and when click
 on it we see the Angular default text "newscard works!"
 
 
-# Step 6 - Create a basic News Card
-## Newscard.component.html
+## Step 6 - Create a basic News Card
+### Newscard.component.html
 
 ``` html
 <mat-card fxLayout='column' fxFlex="1 1 auto" class="mat-card">
