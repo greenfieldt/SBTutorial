@@ -1,4 +1,4 @@
-**Component Driven Development using StoryBook and Angular **
+** Component Driven Development using StoryBook and Angular **
 =====================================
 **Author:** *Timothy Greenfield*
 
