@@ -1,5 +1,11 @@
+**Component Driven Development using StoryBook and Angular **
+=====================================
+**Author:** *Timothy Greenfield*
 
-# Component Driven Development using StoryBook and Angular
+**Date:** *5/11/19*
+
+---
+
 In this tutorial we will make a simple Angular App that downloads an
 infinite list of News Articles from the NewsAPI.org website and
 displays them as a lazyloaded infinite list in Angular.  We will use
