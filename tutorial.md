@@ -88,6 +88,7 @@ I'm going to give a super high level review of the data model so we
 have some understanding of what is happening
 
 ## Add shared/service
+
 - Add news-api-service.ts
 Brief Explanation - This service creates a Subject that pushes News
 Articles it receives by querying the newsapi.com api
