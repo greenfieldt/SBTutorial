@@ -3,14 +3,6 @@ export class Source {
     name: string = "";
 }
 
-export class NewsMetaInformation {
-    id: string = '';
-    hasLiked: boolean = false;
-    comments: string[] = [];
-    isStared: boolean = false;
-    numLikes: number = 0;
-
-}
 
 export class NewsArticle_NewsApiV2 {
     author: string = "";
@@ -27,11 +19,13 @@ export class NewsArticle extends NewsArticle_NewsApiV2 {
 
     id: string = "";
     sourceImage: string = "";
+    hasLiked: boolean = false;
+    comments: string[] = [];
+    isStared: boolean = false;
+    numLikes: number = 0;
+
 }
 
-export class DisplayArticle extends NewsArticle {
-    meta: NewsMetaInformation = new NewsMetaInformation
-}
 
 /*
 example newsapi v2 data structure

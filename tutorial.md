@@ -355,6 +355,17 @@ on it we see the Angular default text "newscard works!"
 
 
 ## Step 6 - Create a basic News Card
+
+### Add the NGXS Store ###
+
+To complement Storybook / Component Driven Development we are going to
+use NGXS as our state engine
+`npm i @ngxs/store`
+We also need to install Angular Material 
+`npm install @angular/material @angular/cdk @angular/animations @angular/flex-layout`
+
+
+
 ### Newscard.component.html
 
 ``` html

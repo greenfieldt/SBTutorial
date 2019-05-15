@@ -1,16 +1,23 @@
 import { State, Action, Selector, StateContext, Store } from '@ngxs/store';
 
-import { tap, map, scan, first, mergeMap, distinctUntilChanged } from 'rxjs/operators';
+import { tap, first } from 'rxjs/operators';
 import { pipe, Observable, of, Subscription } from 'rxjs';
-import { SettingsState } from './settings.state';
 import { OnDestroy } from '@angular/core';
 import { produce } from 'immer'
 
 import { NewsArticle } from '../model/news-article';
 import { NewsSource } from '../model/news-source';
-import { InitArticles, GetMoreArticles, GetSources, StarArticle, ArticlesLoaded, LikeArticle, ShowArticle, UpdateInterestedArticlestoCloud, GetInterestedArticlesFromCloud, ChangeNewsSource } from './news.actions';
+import {
+    InitArticles,
+    GetMoreArticles,
+    GetSources,
+    StarArticle,
+    ArticlesLoaded,
+    LikeArticle,
+    ShowArticle,
+    ChangeNewsSource
+} from './news.actions';
 import { NewsApiService } from '../service/news-api.service';
-import { DbService } from '../service/db.service';
 
 
 export class NewsStateModel {
@@ -73,7 +80,7 @@ export class NewsState implements OnDestroy {
         return state.newsSources;
     }
 
-    constructor(private newsService: NewsApiService, private store: Store, private db: DbService) {
+    constructor(private newsService: NewsApiService, private store: Store) {
     }
 
     ngOnDestroy() {
@@ -108,8 +115,6 @@ export class NewsState implements OnDestroy {
                 )
             );
         this._sub = this._currentInfiniteNewsFeed.subscribe();
-
-
     }
 
     @Action(InitArticles)
@@ -131,15 +136,6 @@ export class NewsState implements OnDestroy {
             );
         this._sub = this._currentInfiniteNewsFeed.subscribe();
 
-        this._fssub = this.db.doc$('news/interestingFeed').pipe(
-            distinctUntilChanged(),
-            tap((x) => {
-                //console.log("Get IARFC was called", x);
-                this.store.dispatch(new GetInterestedArticlesFromCloud(x.intrestingArticles));
-
-            })
-        ).subscribe();
-
 
     }
 
@@ -147,7 +143,7 @@ export class NewsState implements OnDestroy {
     @Action(GetMoreArticles)
     getMoreArticles(ctx: StateContext<NewsStateModel>, action: NewsStateModel) {
         this._pageNumber++;
-        let cacheSize = this.store.selectSnapshot(SettingsState.getCacheSize);
+        let cacheSize = 50;
         ctx.patchState({ loading: true })
         this.newsService.getArticlesByPage(this._pageNumber, cacheSize);
     }
@@ -182,7 +178,6 @@ export class NewsState implements OnDestroy {
                 })
             })
         });
-        ctx.dispatch(new UpdateInterestedArticlestoCloud());
     }
 
     @Action(LikeArticle)
@@ -207,27 +202,8 @@ export class NewsState implements OnDestroy {
         })
 
         ctx.patchState({ newsFeed: updatedState });
-        return ctx.dispatch(new UpdateInterestedArticlestoCloud());
     }
 
-
-    @Action(UpdateInterestedArticlestoCloud)
-    updateInterestingArticlesToCloud(ctx: StateContext<NewsStateModel>) {
-        let interestingArticles = this.store.selectSnapshot(NewsState.interestedFeed);
-
-        //console.log("before like", interestingArticles);
-        this.db.updateAt('news/interestingFeed', { intrestingArticles: interestingArticles });
-
-    }
-
-    @Action(GetInterestedArticlesFromCloud)
-    getInterestingArticlesFromCloud(ctx: StateContext<NewsStateModel>,
-        action: GetInterestedArticlesFromCloud) {
-        let _newsFeed: NewsArticle[] = ctx.getState().newsFeed;
-        let _cloudArticles: NewsArticle[] = action.payload;
-        let mergedArray: NewsArticle[] = this.mergeNewsArticlesArrays(_cloudArticles, _newsFeed);
-        ctx.patchState({ newsFeed: mergedArray });
-    }
 
 
     private mergeNewsArticlesArrays(ourArray: NewsArticle[], theirArray: NewsArticle[]) {
@@ -246,7 +222,6 @@ export class NewsState implements OnDestroy {
         for (var i = 0; i < ourArray.length; i++) {
             var e = ourArray[i];
             if (!(e.id in hash)) {
-                //              console.log("AIOA:", e.id);
                 hash[e.id] = i;
                 ii++
                 ret.push(e);
@@ -256,15 +231,10 @@ export class NewsState implements OnDestroy {
         for (var i = 0; i < theirArray.length; i++) {
             var e = theirArray[i];
             if (!(e.id in hash)) {
-                //                console.log("AITA", e.id);
                 hash[e.id] = ii;
                 ii++;
                 ret.push(e);
             }
-            // else {
-            //     //merge item!!!
-            //     let mi = ret[hash[e.id]] as NewsArticle;
-            // }
         }
 
         return ret;

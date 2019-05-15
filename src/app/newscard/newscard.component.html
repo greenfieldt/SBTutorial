@@ -1,3 +1,39 @@
-<p>
-  newscard works!
-</p>
+<mat-card fxLayout='column' fxFlex="1 1 auto" class="mat-card">
+  <img *ngIf="newsArticle.urlToImage" mat-card-image
+       class="mat-card-image" src={{newsArticle.urlToImage}}
+       alt="" (click)="_onViewArticle()">
+
+  <img *ngIf="!newsArticle.urlToImage" mat-card-image
+       class="mat-card-image" src="../../assets/errorImg/cantLoadImg.png" alt="">
+
+  <div class="center">
+    <mat-card-header class="hrader-top-to-bottom">
+      <div mat-card-avatar [ngStyle]="{'background-image':
+				      'url(' + newsArticle.sourceImage
+				      + ')'}"
+	   class="header-image">
+      </div>
+      <mat-card-title class="title">
+	{{newsArticle.title}}
+      </mat-card-title>
+      
+      <mat-card-subtitle class="subtitle" >
+	{{newsArticle.source.name}}
+      </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content class="mat-card-content">
+    <p>
+      {{newsArticle.description}}
+    </p>
+
+  </mat-card-content>
+
+  <mat-card-actions class="mat-action-content">
+
+  </mat-card-actions>
+  </div>
+
+
+</mat-card>
+

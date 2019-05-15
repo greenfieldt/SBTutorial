@@ -45,13 +45,3 @@ export class ChangeNewsSource {
     static readonly type = '[News] Change the News Source the newsFeed is looking at';
     constructor(public payload: NewsSource) { }
 }
-
-export class UpdateInterestedArticlestoCloud {
-    static readonly type = '[News] Add interested articles to cloud';
-    constructor() { }
-}
-
-export class GetInterestedArticlesFromCloud {
-    static readonly type = '[News] Get interested articles from cloud';
-    constructor(public payload: NewsArticle[]) { }
-}
