@@ -1,10 +1,15 @@
 **Component Driven Development using StoryBook and Angular**
 =====================================
+<div style="-webkit-column-count: 2; -moz-column-count: 2; column-count: 2; -webkit-column-rule: 1px dotted #e0e0e0; -moz-column-rule: 1px dotted #e0e0e0; column-rule: 0px dotted #e0e0e0;">
+    <div style="display: inline-block;">
 **Author:** *Timothy Greenfield* 
-
 **Date:** *5/17/19*
+</div>
+<div style="margin-left: 100px;">
 
 ![The Author](https://firebasestorage.googleapis.com/v0/b/increatesoftware.appspot.com/o/IncreateSoftware%2Ftim.jpg?alt=media&token=8a6dbaff-7b83-484f-9be5-b8436b737878 "The Author")
+</div>
+</div>
 
 
 ---
