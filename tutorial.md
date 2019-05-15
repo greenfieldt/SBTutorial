@@ -2,7 +2,7 @@
 =====================================
 **Author:** *Timothy Greenfield* 
 
-![Author](https://firebasestorage.googleapis.com/v0/b/increatesoftware.appspot.com/o/IncreateSoftware%2Ftim.jpg?alt=media&token=6c7b45d3-3313-4c16-9c0a-0ef1f725d6d1 "Author")
+![The Author](https://firebasestorage.googleapis.com/v0/b/increatesoftware.appspot.com/o/IncreateSoftware%2Ftim.jpg?alt=media&token=8a6dbaff-7b83-484f-9be5-b8436b737878 "The Author")
 
 **Date:** *5/17/19*
 
