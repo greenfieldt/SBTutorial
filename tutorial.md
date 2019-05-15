@@ -6,13 +6,31 @@
 
 ---
 
-In this tutorial we will make a simple Angular App that downloads an
-infinite list of News Articles from the NewsAPI.org website and
-displays them as a lazyloaded infinite list in Angular.  We will use
-StoryBook to develop this App in a CDD methodology.
+![Storybook
+Realtionship](https://www.learnstorybook.com/storybook-relationship.jpg
+"Storybook Realtionship")
+
+## What is Storybook? ##
+
+> Storybook is an open source tool for developing UI components in
+> isolation for React, Vue, and Angular. It makes building stunning UIs
+> organized and efficient.
 
 
-Technologies (StoryBook, Angular, NGXS, Angular Material)
+In this tutorial we will use Storybook to create an Angular App that
+displays an infinite list of current news articles using
+[Newsapi.org](https://newsapi.org/ "Newsapi.org") as our datasource.
+
+
+### The Tech: ###
+
+StoryBook
+
+Angular
+
+NGXS
+
+Angular Material
 
 ## Step 1 -- Create a New Angular Project
 Our first step will be to start a new angular project.  For this
@@ -24,26 +42,32 @@ We are going to assume you've already done this
 
 ### Making a new project
  - ng new storybook
+  
   (do not enable angular routing)
+  
   (select SCSS)
 
 ### Testing the install by using 
 - ng serve
+  
   (navigate to localhost:4200)
 
 
 ## Step 2 -- Install Storybook
-Our second step is to install StoryBook.  StoryBook has a QuickStart
-guide and a StorbyBook for Angular guide.  The quick start guide
-advises you to use install the storybook cli and then use sb init.
-Many people people have had problems with that when installing
-storybook on ongoing problems.  But let's just give it a try since our
-project is brand new
+Our second step is to install StoryBook.  
 
-(a little aside on npx -- it allows you to run commands that you don't
-use very much with out install the softare)
+StoryBook has a QuickStart guide and a StorbyBook for Angular guide.
+The quick start guide advises you to use install the storybook cli and
+then use `sb init`.  This has had some problems in the past and the
+safe way to go for existing projects is to follow the Angular guide
+and set storybook up by hand.  It isn't too much effort and it is
+guaranteed to work.
 
-### Installing Storybook
+But since we are starting with a fresh and empty project `sb init`
+will work for us.
+
+### Installing Storybook ###
+
 - npx -p @storybook/cli sb init
   we can see that sb init was able to detect we are using Angular
 
