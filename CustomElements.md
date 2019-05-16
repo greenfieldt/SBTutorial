@@ -34,7 +34,7 @@ If you select a new newsource or bring up the settings dialog you will
 see there is one issue with the Overlay Component.  This is an open
 bug we are discussing. 
 
-    
+    <div>
   
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
@@ -47,3 +47,4 @@ bug we are discussing.
     <div class="news-app">
       <news-source appshellnorender> </news-source>
     </div>
+<div>
