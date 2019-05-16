@@ -31,39 +31,40 @@ displays an infinite list of current news articles using
 [Newsapi.org](https://newsapi.org/ "Newsapi.org") as our datasource.
 
 
-### The Tech: ###
+#### The Tech: ####
 
-StoryBook
+  * StoryBook
+  * Angular
+  * NGXS
+  * Angular Material
 
-Angular
-
-NGXS
-
-Angular Material
-
-## Step 1 -- Create a New Angular Project
+## Step 1 -- Create a New Angular Project ##
 Our first step will be to start a new angular project.  For this
 project we will not use angular routing and we will select SCSS as our
 styling engine.  
 
-### Installing tooling
-We are going to assume you've already done this
+#### Installing the typical Angular tooling
 
-### Making a new project
- - ng new storybook
-  
-  (do not enable angular routing)
-  
-  (select SCSS)
 
-### Testing the install by using 
-- ng serve
-  
-  (navigate to localhost:4200)
+We'll be coming back to this in Step 3
 
+#### Making a new project
+Create a new angular project for this tutorial. No routing, SCSS.
+
+```shell
+ng new StoryBookTutorial
+cd StoryBookTutorial
+```
+
+Make sure everything went fine `ng serve`
+
+Open http://localhost:4200 and make sure you see the angular splash screen.
 
 ## Step 2 -- Install Storybook
-Our second step is to install StoryBook.  
+Storybook is installed as an npm package.  
+
+`npx -p @storybook/cli sb init`
+
 
 StoryBook has a QuickStart guide and a StorbyBook for Angular guide.
 The quick start guide advises you to use install the storybook cli and
@@ -72,32 +73,30 @@ safe way to go for existing projects is to follow the Angular guide
 and set storybook up by hand.  It isn't too much effort and it is
 guaranteed to work.
 
-But since we are starting with a fresh and empty project `sb init`
-will work for us.
-
-### Installing Storybook ###
-
-- npx -p @storybook/cli sb init
-  we can see that sb init was able to detect we are using Angular
 
 Let's see what changed
 
-Storybook updated Package.JSON
-It added a storybook script to start storybook on port 6006
-It added a bild storybook script 
-It added @babel/core, babel-loader,
-@storybook/[angular|addon-notes|addon-actions|addon-links|addons]
 
-Storybook created new directory called stories and addead a default
+  * Storybook updated Package.JSON
+
+	* It added a storybook script to start storybook on port 6006
+	* It added a bild storybook script 
+	* It added @babel/core, babel-loader,
+	* @storybook/[angular|addon-notes|addon-actions|addon-links|addons]
+
+
+  * Storybook created new directory called stories and addead a default
 story to it (src/stories/index.stories.ts)
 
-Storybook modified your tsconfig.app.json and added ##/#.stores.ts to
+  * Storybook modified your tsconfig.app.json and added ##/#.stores.ts to
 the excludes array
 
-Storybook created a .storybook/config.js file that controls what
+
+  * Storybook created a .storybook/config.js file that controls what
 stories get loaded
 
-Storybook created a .storybook/addons.js file that does something?
+
+  * Storybook created a .storybook/addons.js file that does something?
 
 ### Running Storybook
 - npm run storybook  (kind of slow at the best of times)
