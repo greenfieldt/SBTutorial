@@ -38,7 +38,7 @@ displays an infinite list of current news articles using
   * NGXS
   * Angular Material
 
-## Step 1 -- Create a New Angular Project ##
+## Install Storybook ##
 Our first step will be to start a new angular project.  For this
 project we will not use angular routing and we will select SCSS as our
 styling engine.  
@@ -56,11 +56,12 @@ ng new StoryBookTutorial
 cd StoryBookTutorial
 ```
 
-Make sure everything went fine `ng serve`
+Make sure everything went fine execute `ng serve`
 
 Open http://localhost:4200 and make sure you see the angular splash screen.
 
-## Step 2 -- Install Storybook
+### Initialize Storybook ####
+
 Storybook is installed as an npm package.  
 
 `npx -p @storybook/cli sb init`
@@ -98,38 +99,69 @@ stories get loaded
 
   * Storybook created a .storybook/addons.js file that does something?
 
-### Running Storybook
-- npm run storybook  (kind of slow at the best of times)
 
-## Step 3 -- What's an Addon?
+Test it out by `npm run storybook` and opening http://localhost:6006
+
+### Adding Addons
 Addons allow you to increase the capabilities of Storybook.  One of
 the most popular addons is known as Knob and it allow you to fiddle
-with the state that you pass into (mainly react components).  I
-haven't used that one so much but I do use the ViewPort addon so I can
-be "mobile first"
+with the state that you pass into your components.  Another important
+add on is called ViewPort and it will allow us to select mobile sized
+view ports.
 
-- npm i --save-dev @storybook/addon-viewport
+Installing an Addon is a two step semi-manual process:
 
-- edit .storybook/addons.js and add
-  import '@storybook/addon-viewport/register';
+`npm i --save-dev @storybook/addon-viewport`
 
-### Test the Addon
- Run StoryBook and you will see a new icon
+edit .storybook/addons.js and add
 
-## Step 4 -- Define our Data Model
+`import '@storybook/addon-viewport/register';`
+
+Test the Addon by stopping Storybook if it is still running from
+before and restarting it. You should see a new icon
+![Storybook with Viewport](https://firebasestorage.googleapis.com/v0/b/increatesoftware.appspot.com/o/Storybook%2Fstorybook-viewport.png?alt=media&token=a1075f1b-3db4-4eb0-825b-1ed6d0c4f102 "Storybook with Viewport")
+
+## Define our Data Model
+
+With the addon working we are going to take a brief detour from
+Storybook and define the data model we will be using for this
+tutorial.
+
 We are going to make a News Card --  This card should be responsive
 and display a news organization, a picture, a headline, and a like
 button.  If the you click in the picture then you should be taken to
 the news article and we are going to make a News List -- This will be an infinite list
 of such cards reading from the News API web service.
 
-I'm going to give a super high level review of the data model so we
-have some understanding of what is happening
 
-### Add shared/service
-- Add news-api-service.ts
-Brief Explanation - This service creates a Subject that pushes News
-Articles it receives by querying the newsapi.com api
+### Add a shared/service
+We need to create a service that calls the newsapi.org service to
+return news articles to us.
+
+
+`ng g service shared/service/newsApi`
+
+
+The  [NewsAPI.org](https://newsapi.org/ "NewsAPI.org") endpoint
+provides a free (for limited noncommerical use) news scraping
+service. If you are interested in
+news aggregation you can also look at Newspaper3d
+[Newspaper3k](https://newspaper.readthedocs.io/en/latest/
+"Newspaper3k") which seems to be what NewsAPI is running off of. 
+
+
+We are going to use the everything end point and define the following
+parameters 
+	newssource (i.e., The New York Times) 
+	page (i.e., 3, 4, whatever)
+	pagesize (i.e, 10, 50, etc)
+	API (you can get one from
+	free at news org noncommerical pruposes).  
+
+The heart of the service is an `httpclient.get` where we ask for data,
+break it down, add some local state information, build it back up into
+a single list and push it out in Subject that never closes.
+
 ```typescript
         this.httpClient.get('https://newsapi.org/v2/everything?sources=' 
 	+ this.newsSource.id + '&pageSize=' + pagesize + '&page=' + page 
