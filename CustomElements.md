@@ -34,17 +34,12 @@ If you select a new newsource or bring up the settings dialog you will
 see there is one issue with the Overlay Component.  This is an open
 bug we are discussing. 
 
-    <div>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+<link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+<script src="https://firebasestorage.googleapis.com/v0/b/increatesoftware.appspot.com/o/IncreateSoftware%2Fnews-app-696119f1e6af3575acfc.js?alt=media&token=375e81ab-5631-471d-b929-05321e0905d8" type="text/javascript"></script>
   
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
-    <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
-    
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
-
-	<script src="https://firebasestorage.googleapis.com/v0/b/increatesoftware.appspot.com/o/IncreateSoftware%2Fnews-app-696119f1e6af3575acfc.js?alt=media&token=375e81ab-5631-471d-b929-05321e0905d8" type="text/javascript"></script>
-  
-    <div class="news-app">
-      <news-source appshellnorender> </news-source>
-    </div>
-<div>
+<div class="news-app">
+<news-source appshellnorender> </news-source>
+</div>
