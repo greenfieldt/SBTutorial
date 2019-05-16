@@ -456,7 +456,7 @@ import {
 import { FlexLayoutModule } from '@angular/flex-layout'
 
 //Some data model bits and pieces
-import { NewsCardComponent, NewsCardOrientation } from './news-card.component';
+import { NewsCardComponent, NewsCardOrientation } from './newscard.component';
 import { NewsArticle } from '../shared/model/news-article';
 
 //The data store
