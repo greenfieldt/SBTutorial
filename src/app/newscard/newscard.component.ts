@@ -29,8 +29,9 @@ export class NewscardComponent implements OnInit {
     @Input() public newsCardOrientation: NewsCardOrientation
         = NewsCardOrientation.topToBottom;
     @Input() public newsCardSize: NewsCardSize = NewsCardSize.big;
-
     @Input() newsArticle: NewsArticle;
+
+
     @Output() onViewArticle: EventEmitter<any> = new EventEmitter();
     @Output() onStar: EventEmitter<any> = new EventEmitter();
     @Output() onLiked: EventEmitter<any> = new EventEmitter();
