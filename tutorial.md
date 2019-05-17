@@ -4,8 +4,10 @@
 <div class="header-columns">
     <div class="header-name-date">
 
-**Author: Timothy Greenfield**<br>
-*Date: 5/17/19*
+**Author:** *Timothy Greenfield*
+
+**Date:** *5/XX/19*
+
 	</div>
 	<div class="header-author-image">
 
