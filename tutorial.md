@@ -1,9 +1,10 @@
 **Component Driven Development using StoryBook and Angular**
+##### A short introduction to CDD using Storybook and Angular. In this tutorial we will make a small NewsReader app and explore Storybook's functionality. #####
 =====================================
 <div class="header-columns">
     <div class="header-name-date">
 
-**Author:** *Timothy Greenfield* 
+**Author: ** *Timothy Greenfield* 
 
 **Date:** *5/17/19*
 	</div>
@@ -369,9 +370,9 @@ working towards the following:
 ```
 
 
-### Add StoryBook story
+### Add a StoryBook story
 
-Creating a story in storybook is, as o now, a manual process.  Create
+Creating a story in storybook is, as of now, a manual process.  Create
 a new file called news-card.stories.ts.  Paste our basic template code
 into it.
 
@@ -404,14 +405,11 @@ storiesOf('Composite/News Card', module)
 
 ### News Card Story ###
 
-Let's add some roughed out placeholders for our news card.  When we
-recompile and check story book we will find chrome complaining that
-mat-card-title is not a known element.  The reason for this is that
-the storybook story is taking the place of your app module.  So we
-have to load all of our dependencies in the story itself and since we
-are using Angular Material -- nothing is working.
-
-- 
+When running our components in Storybook the story will take the place
+of our module in the sense that it is here were we will need to define
+import array and inject any state we may need for our Component.
+Storybook has the concept of a simple story and a Composite story.
+Composite stories are built 
 
 ``` typescript
 //add the following modules to our newscard.stories.ts decleration array
