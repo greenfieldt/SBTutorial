@@ -52,8 +52,10 @@ We'll be coming back to this in Step 3
 Create a new angular project for this tutorial. No routing, SCSS.
 
 ```shell
+
 ng new StoryBookTutorial
 cd StoryBookTutorial
+npm i @angular/material @angular/material @angular/animations
 ```
 
 Make sure everything went fine execute `ng serve`
@@ -121,17 +123,19 @@ Test the Addon by stopping Storybook if it is still running from
 before and restarting it. You should see a new icon
 ![Storybook with Viewport](https://firebasestorage.googleapis.com/v0/b/increatesoftware.appspot.com/o/Storybook%2Fstorybook-viewport.png?alt=media&token=a1075f1b-3db4-4eb0-825b-1ed6d0c4f102 "Storybook with Viewport")
 
-## Define our Data Model
+## News Data Model
 
 With the addon working we are going to take a brief detour from
 Storybook and define the data model we will be using for this
 tutorial.
 
-We are going to make a News Card --  This card should be responsive
-and display a news organization, a picture, a headline, and a like
-button.  If the you click in the picture then you should be taken to
-the news article and we are going to make a News List -- This will be an infinite list
-of such cards reading from the News API web service.
+Our example task will be to make a news card using angular material
+MatCard.  The card should be responsive
+and display a news organization, a picture, a headline, some
+interaction buttons (i.e., like
+button) and allow you to click the picture to visit the originating
+news site. Once we have a card we will make a component that display
+an infinite lazy loaded list of such cards.
 
 
 ### Add a shared/service
@@ -139,13 +143,13 @@ We need to create a service that calls the newsapi.org service to
 return news articles to us.
 
 
-`ng g service shared/service/newsApi`
+`ng g service shared/newsApi`
 
 
 The  [NewsAPI.org](https://newsapi.org/ "NewsAPI.org") endpoint
 provides a free (for limited noncommerical use) news scraping
 service. If you are interested in
-news aggregation you can also look at Newspaper3d
+news aggregation you can also look at
 [Newspaper3k](https://newspaper.readthedocs.io/en/latest/
 "Newspaper3k") which seems to be what NewsAPI is running off of. 
 
@@ -163,156 +167,174 @@ break it down, add some local state information, build it back up into
 a single list and push it out in Subject that never closes.
 
 ```typescript
-        this.httpClient.get('https://newsapi.org/v2/everything?sources=' 
-	+ this.newsSource.id + '&pageSize=' + pagesize + '&page=' + page 
-	+ '&apiKey=' + apiKey).pipe(
-            map(data => data['articles']),
-            map(articles => {
-                return articles.map((article) => {
-                    let _na: NewsArticle = article as NewsArticle;
-		    ... //add some more information
-                    return _na;
+
+import { Injectable, OnDestroy } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, Subject, of, Subscription } from 'rxjs';
+import { first, map, tap, scan, catchError } from 'rxjs/operators'
+import { forEach } from '@angular/router/src/utils/collection';
+import { NewsArticle } from '../model/news-article';
+import { NewsSource } from '../model/news-source';
+
+const apiKey = <YOUR API KEY HERE>;
+
+
+@Injectable({
+    providedIn: 'root'
+})
+export class NewsApiService implements OnDestroy {
+    newsSource: NewsSource;
+
+    page: number = 0;
+    resultsPerPage: number = 20
+
+    resultStream: Subject<NewsArticle[]> = new Subject();
+
+
+    constructor(private httpClient: HttpClient) {
+    }
+
+    ngOnDestroy() {
+        this.resultStream.complete();
+    }
+
+    initArticles(id: NewsSource, pagesize = 50): Observable<any> {
+        this.newsSource = id;
+        //news-api.org requires you to start pagination on page 1
+        this.getArticlesByPage(1, pagesize);
+        return this.resultStream.asObservable();
+    }
+
+    getArticlesByPage(page, pagesize = 50) {
+        this.httpClient.get('https://newsapi.org/v2/everything?sources='
+            + this.newsSource.id
+            + '&pageSize=' + pagesize
+            + '&page=' + page
+            + '&apiKey=' + apiKey).pipe(
+                map(data => data['articles']),
+                map(articles => {
+                    return articles.map((article) => {
+                        let _na: NewsArticle = article as NewsArticle;
+                        _na.numLikes = 0;
+                        _na.hasLiked = false;
+                        _na.comments = [];
+                        _na.isStared = false;
+                        return _na;
+                    });
+                }),
+                scan((a: NewsArticle[], n: NewsArticle[]) => [...a, ...n], []),
+                first(), //there is only going to be one of these
+                catchError((error) => {
+                    console.log("Http error", error);
+                    return of(error);
                 })
-            }),
-            scan((a: NewsArticle[], n: NewsArticle[]) => [...a, ...n], []),
-            first(),
-            catchError((error) => {
-                console.log("Http error", error);
-                return of(error);
-            })
-        ).subscribe((x) => {
-            this.resultStream.next(x);
-        })
-```
-### Add shared/state
-- Add news.state (NGXS state file)
-- Add news.actions (NGXS action definitions)
-
-Brief explanation - news.state is the controller of the system.  
-It exposes a NGXS state object 
-
-``` typescript
-@State<NewsStateModel>({
-    name: 'news',
-    defaults: {
-        loading: true,
-        newsFeed: [],
-	...
-    }
-})
-```
-
-
-``` typescript
-export class InitArticles {
-    static readonly type = '[News] Initialize a stream of articles from server';
-    constructor(public payload: NewsSource) { }
-}
-
-export class GetMoreArticles {
-    static readonly type = '[News] Get more articles from server';
-    constructor() { }
-}
-```
-
-
-newsFeed contains an infinite array of newsArticles obtained from
-newsapi.com 
-
-
-### Add shared/model
-- add news-article.ts
-Brief Explanation -- news-article types the news-api data structure 
-
-``` typescript
-export class NewsArticle_NewsApiV2 {
-    author: string = "";
-    content: string = "";
-    description: string = "";
-    publishedAt: Date;
-    source: Source;
-    title: string = "";
-    url: string = "";
-    urlToImage: string = ""
-}
-```
-
-### Use of the model
-In a component that lists news articles (with a selector like: news-card-list)
-``` typescript
-    //observable of the data source
-    @Select(NewsState.newsFeed) articles$: Observable<NewsArticle[]>;
-
-    //do something with the data and ....
-
-    //call get more actions when you need more data (like in a scrollviewport)
-        this.SICSubscription = this.scrollViewPort.scrolledIndexChange.pipe(
-            debounceTime(100),
-            tap((x) => {
-                const end = this.scrollViewPort.getRenderedRange().end;
-                const total = this.scrollViewPort.getDataLength();
-                if (end && end === total) {
-                    this.store.dispatch(new GetMoreArticles());
-                }
-            })
-        ).subscribe();
-
-```
-
-
-And at the end of the day you use it like this in a sample application
-``` typescript
-
-import { Component } from '@angular/core';
-import { Store } from '@ngxs/store';
-
-
-import {
-    GetSources,
-    InitArticles,
-} from './shared/state/news.actions';
-
-import { NewsSource } from './shared/model/news-source';
-
-
-@Component({
-    selector: 'news-app',
-    templateUrl: '<news-card-list></news-card-list>',
-    styleUrls: ['./app.component.scss']
-})
-export class AppComponent {
-
-    title = 'news-app';
-
-    constructor(private store: Store) {}
-
-    ngOnInit() {
-        const newsSource = {
-            category: "general",
-            country: "us",
-            description: "The New York Times: Find breaking news, multimedia, reviews & opinion on Washington, business, sports, movies, travel, books, jobs, education, real estate, cars & more at nytimes.com.",
-            id: "the-new-york-times",
-            language: "en",
-            name: "The New York Times",
-            url: "http://www.nytimes.com"
-        };
-
-        this.store.dispatch(new GetSources());
-        this.store.dispatch(new InitArticles(newsSource));
+            ).subscribe((x) => {
+                this.resultStream.next(x);
+            });
     }
 }
-
 ```
 
-
-## Step 5 - News Card Component
+## News Card Component
 
 Ok, we have access to all the data we could ever need so let's get
 back to StoryBook and try to create the situation we just talked about
 in a Component Driven Development way.
 
 ### Create a new news card component 
-- ng g component newscard
+`ng g component newscard`
+
+Our NewsCard is starting life as a very simple thing.  It will take
+one Input parameter which holds a NewsArticle and 4 Outputs that allow
+it to emit the 4 events it will be capable of handling (star,like,view,comment)
+
+```typescript
+
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { NewsArticle } from '../shared/model/news-article';
+
+@Component({
+    selector: 'newscard',
+    templateUrl: './newscard.component.html',
+    styleUrls: ['./newscard.component.scss']
+})
+export class NewscardComponent implements OnInit {
+
+    @Input() newsArticle: NewsArticle;
+
+
+    @Output() onViewArticle: EventEmitter<any> = new EventEmitter();
+    @Output() onStar: EventEmitter<any> = new EventEmitter();
+    @Output() onLiked: EventEmitter<any> = new EventEmitter();
+    @Output() onComment: EventEmitter<any> = new EventEmitter();
+
+    constructor() { }
+
+    ngOnInit() {
+    }
+
+    _onViewArticle() {
+    }
+
+    _onLikeArticle() {
+    }
+
+    _onStarArticle() {
+    }
+
+}
+```
+
+Next we will stub out the three basic section of a Mat-Card.  We are
+working towards the following:
+
+
+  * mat-card-image - The top image from the article
+
+  * mat-card-header - Article title and subtitle
+
+  * mat-card-content - Summary of article
+
+  * mat-card-actions - 3 FontAwesome icons 
+  
+  We want to get rapid feedback and be able to share our progress with
+  out team so we won't worry about styling until we can see our raw
+  component in Storybook.
+  
+``` html
+
+<mat-card>
+  <img mat-card-image
+       class="mat-card-image" src={{newsArticle.urlToImage}}
+       alt="" (click)="_onViewArticle()">
+
+  <div class="center">
+    <mat-card-header class="hrader-top-to-bottom">
+      <mat-card-title class="title">
+		  {{newsArticle.title}}
+	  </mat-card-title>
+      
+      <mat-card-subtitle class="subtitle" >
+		  {{newsArticle.source.name}}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="mat-card-content">
+      <p>
+        {{newsArticle.description}}
+      </p>
+
+    </mat-card-content>
+
+    <mat-card-actions class="mat-action-content">
+
+    </mat-card-actions>
+ </div>
+
+</mat-card>
+
+```
+
 
 ### Add a StoryBook story for this new component
 Before we can add a new story we have to make a decision.  StoryBook
@@ -387,58 +409,7 @@ on it we see the Angular default text "newscard works!"
 
 ## Step 6 - Create a basic News Card
 
-### Add the NGXS Store ###
 
-To complement Storybook / Component Driven Development we are going to
-use NGXS as our state engine
-`npm i @ngxs/store`
-We also need to install Angular Material 
-`npm install @angular/material @angular/cdk @angular/animations @angular/flex-layout`
-
-
-
-### Newscard.component.html
-
-``` html
-<mat-card fxLayout='column' fxFlex="1 1 auto" class="mat-card">
-  <img #ngIf="newsArticle.urlToImage" mat-card-image
-       class="mat-card-image" src={{newsArticle.urlToImage}}
-       alt="" (click)="_onViewArticle()">
-
-  <img #ngIf="!newsArticle.urlToImage" mat-card-image
-       class="mat-card-image" src="../../assets/errorImg/cantLoadImg.png" alt="">
-
-  <div class="center">
-    <mat-card-header class="hrader-top-to-bottom">
-      <div mat-card-avatar [ngStyle]="{'background-image':
-				      'url(' + newsArticle.sourceImage
-				      + ')'}"
-	   class="header-image">
-      </div>
-      <mat-card-title class="title">
-	{{newsArticle.title}}
-      </mat-card-title>
-      
-      <mat-card-subtitle class="subtitle" >
-	{{newsArticle.source.name}}
-      </mat-card-subtitle>
-  </mat-card-header>
-
-  <mat-card-content class="mat-card-content">
-    <p>
-      {{newsArticle.description}}
-    </p>
-
-  </mat-card-content>
-
-  <mat-card-actions class="mat-action-content">
-
-  </mat-card-actions>
-  </div>
-
-</mat-card>
-
-```
 
 Let's add some roughed out placeholders for our news card.  When we
 recompile and check story book we will find chrome complaining that
@@ -447,7 +418,7 @@ the storybook story is taking the place of your app module.  So we
 have to load all of our dependencies in the story itself and since we
 are using Angular Material -- nothing is working.
 
-- npm i @angular/material
+- 
 
 ``` typescript
 //add the following modules to our newscard.stories.ts decleration array
