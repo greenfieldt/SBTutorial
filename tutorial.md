@@ -4,7 +4,7 @@
 <div class="header-columns">
     <div class="header-name-date">
 
-**Author: Timothy Greenfield**
+**Author: Timothy Greenfield**<br>
 *Date: 5/17/19*
 	</div>
 	<div class="header-author-image">
