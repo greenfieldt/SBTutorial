@@ -1,5 +1,5 @@
 **Component Driven Development using StoryBook and Angular**
-###### A short introduction to CDD using Storybook and Angular. In this tutorial we will make a small NewsReader app and explore Storybook's functionality. ######
+###### A short introduction to CDD using Storybook and Angular. In this tutorial we will make a small NewsReader app and explore Storybook's functionality ######
 
 <div class="header-columns">
     <div class="header-name-date">
