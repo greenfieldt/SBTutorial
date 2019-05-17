@@ -104,6 +104,38 @@ stories get loaded
 
 Test it out by `npm run storybook` and opening http://localhost:6006
 
+StoryBook comes configured to read stories out of the src/stories
+directory out of the box.  I would rater put my stories at the same
+level as the component and the unit tests so I'm going to edit 
+.storybook/config.js 
+
+Option 1) look in src/stories
+``` typescript
+//Option 1: load from the src/stories folder
+import { configure } from '@storybook/angular';
+
+function loadStories() {
+  const req = require.context('../stories', true, /\.stories\.ts$/);
+  req.keys().forEach(filename => req(filename));
+}
+
+configure(loadStories, module);
+```
+
+Option 2) look in the src/**
+``` typescript
+
+//Option 2: automatically import all files ending in #.stories.ts
+import { configure } from '@storybook/angular';
+
+const req = require.context('../src/', true, /\.stories\.ts$/);
+function loadStories() {
+  req.keys().forEach(filename => req(filename));
+}
+
+configure(loadStories, module);
+```
+
 ### Adding Addons
 Addons allow you to increase the capabilities of Storybook.  One of
 the most popular addons is known as Knob and it allow you to fiddle
@@ -235,13 +267,14 @@ export class NewsApiService implements OnDestroy {
 }
 ```
 
-## News Card Component
+## Create Component
 
 Ok, we have access to all the data we could ever need so let's get
 back to StoryBook and try to create the situation we just talked about
-in a Component Driven Development way.
+in a Component Driven Development way.  We will start by creating our
+NewsCardComponent.
 
-### Create a new news card component 
+
 `ng g component newscard`
 
 Our NewsCard is starting life as a very simple thing.  It will take
@@ -336,45 +369,11 @@ working towards the following:
 ```
 
 
-### Add a StoryBook story for this new component
-Before we can add a new story we have to make a decision.  StoryBook
-doesn't come configured to read stories dynamically <check this: the
-docs say it doesn't come configured but that appears to have changed>.  As they state in
-their documentation this gets old fast.  Let's add some code to
-auto-load all the stories in one of two ways:  You can either
-put your stories at the same level as your components or in the
-src/stories folder.
+### Add StoryBook story
 
-
-``` typescript
-//Option 1: load from the src/stories folder
-import { configure } from '@storybook/angular';
-
-function loadStories() {
-  const req = require.context('../stories', true, /\.stories\.ts$/);
-  req.keys().forEach(filename => req(filename));
-}
-
-configure(loadStories, module);
-```
-
-``` typescript
-
-//Option 2: automatically import all files ending in #.stories.ts
-import { configure } from '@storybook/angular';
-
-const req = require.context('../src/', true, /\.stories\.ts$/);
-function loadStories() {
-  req.keys().forEach(filename => req(filename));
-}
-
-configure(loadStories, module);
-```
-
-I'm going to choose to put my stories at the same level of my
-components (Option 2).
-
-- Create a file called news-card.stories.ts
+Creating a story in storybook is, as o now, a manual process.  Create
+a new file called news-card.stories.ts.  Paste our basic template code
+into it.
 
 Here is our basic template
 
@@ -402,14 +401,8 @@ storiesOf('Composite/News Card', module)
     });
 ```
 
-now if we go back to Storybook we can see there is a new section
-called composite with a new subsection called NewsCard and when click
-on it we see the Angular default text "newscard works!"
 
-
-## Step 6 - Create a basic News Card
-
-
+### News Card Story ###
 
 Let's add some roughed out placeholders for our news card.  When we
 recompile and check story book we will find chrome complaining that
