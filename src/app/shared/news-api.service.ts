@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, of, Subscription } from 'rxjs';
 import { first, map, tap, scan, catchError } from 'rxjs/operators'
 import { forEach } from '@angular/router/src/utils/collection';
-import { NewsArticle } from '../model/news-article';
-import { NewsSource } from '../model/news-source';
+import { NewsArticle } from './news-article';
+import { NewsSource } from './news-source';
 
 const apiKey = '22d9615962774038a7fda97bb5b8ca2f';
 

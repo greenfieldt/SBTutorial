@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { NewsArticle } from '../shared/model/news-article';
+import { NewsArticle } from '../shared/news-article';
 
 
 export enum NewsCardOrientation {

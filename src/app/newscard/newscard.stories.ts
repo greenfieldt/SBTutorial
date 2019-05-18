@@ -17,11 +17,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 //Some data model bits and pieces
-import { NewsArticle } from '../shared/model/news-article';
+import { NewsArticle } from '../shared/news-article';
 import { NewscardComponent, NewsCardOrientation } from './newscard.component';
-
-//The data store
-import { NgxsModule } from '@ngxs/store';
 
 
 //Test Data
@@ -67,8 +64,7 @@ storiesOf('Composite/News Card', module)
                 MatFormFieldModule,
                 MatAutocompleteModule,
                 MatBadgeModule,
-                FlexLayoutModule,
-                NgxsModule.forRoot()
+                FlexLayoutModule
             ],
         }),
     ).add('default', () => {
