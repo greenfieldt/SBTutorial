@@ -47,7 +47,6 @@ export class NewsListComponent implements OnInit {
                 if (_source) {
                     return this.newsService
                         .initArticles(_source, this.numFetch).pipe(
-                            //tap(x => console.log(x)),
                             scan((a: NewsArticle[], n: NewsArticle[]) => [...a, ...n], [])
                         );
                 }
@@ -68,7 +67,6 @@ export class NewsListComponent implements OnInit {
                 const total = this.scrollViewPort.getDataLength();
                 if (end && end === total) {
                     this.page++;
-                    console.log(this.numFetch);
                     this.newsService.getArticlesByPage(this.page, this.numFetch);
                 }
             })
