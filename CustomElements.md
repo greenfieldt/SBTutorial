@@ -16,6 +16,9 @@
 </div>
 
 ---
+![Custom
+Elements](https://firebasestorage.googleapis.com/v0/b/increatesoftware.appspot.com/o/Storybook%2Flogo_512x512.png?alt=media&token=2caa2255-e8c9-4df7-aa74-dfce8fc574a4
+"Custom Elements")
 
 In this tutorial we are going to take the component we developed in
 our Storybook tutorial using component driven development principals
