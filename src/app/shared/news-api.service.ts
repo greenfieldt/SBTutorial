@@ -6,6 +6,7 @@ import { forEach } from '@angular/router/src/utils/collection';
 import { NewsArticle } from './news-article';
 import { NewsSource } from './news-source';
 
+
 const apiKey = '22d9615962774038a7fda97bb5b8ca2f';
 
 
@@ -18,13 +19,21 @@ export class NewsApiService implements OnDestroy {
     page: number = 0;
 
     resultStream: Subject<NewsArticle> = new Subject();
+    private cachedSources$: Observable<any>;
 
 
     constructor(private httpClient: HttpClient) {
+        this.cachedSources$ = this.httpClient
+            .get('https://newsapi.org/v2/sources?apiKey=' + apiKey);
     }
 
     ngOnDestroy() {
         this.resultStream.complete();
+    }
+
+    initSources(): Observable<any> {
+        return this.cachedSources$.pipe(
+            map(data => data['sources'] as NewsSource));
     }
 
     initArticles(id: NewsSource, pagesize = 50): Observable<any> {
@@ -54,7 +63,6 @@ export class NewsApiService implements OnDestroy {
                         return _na;
                     });
                 }),
-                //scan((a: NewsArticle[], n: NewsArticle[]) => [...a, ...n], []),
                 first(), //there is only going to be one of these
                 catchError((error) => {
                     console.log("Http error", error);

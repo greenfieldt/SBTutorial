@@ -1,11 +1,12 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-import { Subscription, Observable } from 'rxjs';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Subscription, Observable, of } from 'rxjs';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { NewsArticle } from '../shared/news-article';
-import { tap, scan, debounceTime } from 'rxjs/operators';
+import { tap, map, scan, filter, debounceTime, switchMap } from 'rxjs/operators';
 import { NewsApiService } from '../shared/news-api.service';
 import { NewsSource } from '../shared/news-source';
 import { NewsActionsData, NewsActionEvent } from '../newscard-actions/newscard-actions.component';
+
 
 @Component({
     selector: 'news-list',
@@ -17,28 +18,20 @@ export class NewsListComponent implements OnInit {
     @ViewChild(CdkVirtualScrollViewport) scrollViewPort: CdkVirtualScrollViewport;
     sub: Subscription = new Subscription();
 
+    @Input() numFetch: number = 5;
+    @Input() newsSourceName: string = "The New York Times";
+
+
     @Output() onViewArticle: EventEmitter<any> = new EventEmitter();
     @Output() onChanged: EventEmitter<NewsActionEvent> = new EventEmitter();
 
     page: number = 1;
     article$: Observable<NewsArticle[]>;
+    sources$: Observable<NewsSource[]>;
 
     constructor(private newsService: NewsApiService) {
-        const newsSource: NewsSource = {
-            category: "general",
-            country: "us",
-            description: "The New York Times: Find breaking news, multimedia, reviews & opinion on Washington, business, sports, movies, travel, books, jobs, education, real estate, cars & more at nytimes.com.",
-            id: "the-new-york-times",
-            language: "en",
-            name: "The New York Times",
-            url: "http://www.nytimes.com"
-        };
 
-        this.article$ = this.newsService.initArticles(newsSource, 5).pipe(
-            scan((a: NewsArticle[], n: NewsArticle[]) => [...a, ...n], [])
-        );
 
-        this.article$.pipe(tap(x => console.log(x))).subscribe();
     }
 
     trackByIdx(i, newsArticle: NewsArticle) {
@@ -46,6 +39,28 @@ export class NewsListComponent implements OnInit {
     }
 
     ngOnInit() {
+        console.log(this.newsSourceName);
+        this.article$ = this.newsService.initSources().pipe(
+            switchMap((sourceArray: NewsSource[]) => {
+                const _source =
+                    sourceArray.filter((source: NewsSource) => source.name === this.newsSourceName)[0];
+                if (_source) {
+                    return this.newsService
+                        .initArticles(_source, this.numFetch).pipe(
+                            //tap(x => console.log(x)),
+                            scan((a: NewsArticle[], n: NewsArticle[]) => [...a, ...n], [])
+                        );
+                }
+                else {
+                    return of([]);
+                }
+
+            }),
+        );
+
+
+        this.sub.add(this.article$.pipe(tap(x => console.log(x))).subscribe());
+
         this.sub.add(this.scrollViewPort.scrolledIndexChange.pipe(
             debounceTime(100),
             tap((x) => {
@@ -53,8 +68,8 @@ export class NewsListComponent implements OnInit {
                 const total = this.scrollViewPort.getDataLength();
                 if (end && end === total) {
                     this.page++;
-                    console.log(this.page);
-                    this.newsService.getArticlesByPage(this.page, 5);
+                    console.log(this.numFetch);
+                    this.newsService.getArticlesByPage(this.page, this.numFetch);
                 }
             })
         ).subscribe());
