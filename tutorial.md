@@ -206,8 +206,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, of, Subscription } from 'rxjs';
 import { first, map, tap, scan, catchError } from 'rxjs/operators'
 import { forEach } from '@angular/router/src/utils/collection';
-import { NewsArticle } from '../model/news-article';
-import { NewsSource } from '../model/news-source';
+import { NewsArticle } from '.news-article';
+import { NewsSource } from '.news-source';
 
 const apiKey = <YOUR API KEY HERE>;
 
@@ -285,7 +285,7 @@ it to emit the 4 events it will be capable of handling (star,like,view,comment)
 ```typescript
 
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { NewsArticle } from '../shared/model/news-article';
+import { NewsArticle } from '../shared/news-article';
 
 @Component({
     selector: 'newscard',
@@ -452,10 +452,6 @@ import { FlexLayoutModule } from '@angular/flex-layout'
 import { NewsCardComponent, NewsCardOrientation } from './newscard.component';
 import { NewsArticle } from '../shared/model/news-article';
 
-//The data store
-import { NgxsModule } from '@ngxs/store';
-
-
 //Test Data
 export const testNewsArticle: NewsArticle = {
     id: '12345657890987654321',
@@ -495,8 +491,7 @@ storiesOf('Composite/News Card', module)
                 MatFormFieldModule,
                 MatAutocompleteModule,
                 MatBadgeModule,
-                FlexLayoutModule,
-                NgxsModule.forRoot()
+                FlexLayoutModule
             ],
         }),
     )
