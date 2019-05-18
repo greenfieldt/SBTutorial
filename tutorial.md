@@ -7,7 +7,6 @@
 **Author:** *Timothy Greenfield*
 
 **Date:** *5/XX/19*
-
 </div>
 <div class="header-author-image">
 
