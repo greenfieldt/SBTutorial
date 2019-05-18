@@ -1,0 +1,10 @@
+<cdk-virtual-scroll-viewport itemSize="300" class="viewport">
+    <span *cdkVirtualFor="let article of article$ | async; trackBy:
+			  trackByIdx" class="item">
+      <newscard  [newsArticle]="article"
+		 (onViewArticle)="_onViewArticle($event)"
+		 (onChanged)="_onChanged($event)">
+>
+      </newscard>
+    </span>
+</cdk-virtual-scroll-viewport>

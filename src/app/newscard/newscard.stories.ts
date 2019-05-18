@@ -60,12 +60,12 @@ storiesOf('Composite/News Card', module)
     ).add('default', () => {
         return {
             template: `<newscard 
-[newsArticle$]="testNewsArticle"
+[newsArticle]="testNewsArticle"
 (onViewArticle)="onViewArticle($event)"
 (onChanged)="onChanged($event)">
 </newscard>`,
             props: {
-                testNewsArticle: of(testNewsArticle),
+                testNewsArticle: testNewsArticle,
                 onViewArticle: newsCardActions.onViewArticle,
                 onChanged: newsCardActions.onChanged
             },

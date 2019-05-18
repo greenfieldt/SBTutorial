@@ -12,25 +12,25 @@ import { switchMap } from 'rxjs/operators';
 })
 export class NewscardComponent implements OnInit {
 
-    @Input() newsArticle$: Observable<NewsArticle>;
-    newsActionData$: Observable<NewsActionsData>;
+    @Input() newsArticle: NewsArticle;
+    newsActionData: NewsActionsData;
 
     @Output() onViewArticle: EventEmitter<any> = new EventEmitter();
     @Output() onChanged: EventEmitter<NewsActionEvent> = new EventEmitter();
 
+    itemSize = 300;
+
     constructor() { }
 
     ngOnInit() {
-        this.newsActionData$ = this.newsArticle$.pipe(
-            switchMap((article: NewsArticle) => {
-                return of({
-                    numLikes: article.numLikes,
-                    hasLiked: false,
-                    stared: article.isStared,
-                    numComments: article.comments.length
-                });
-
-            }));
+        if (this.newsArticle) {
+            this.newsActionData = {
+                numLikes: this.newsArticle.numLikes,
+                hasLiked: false,
+                stared: this.newsArticle.isStared,
+                numComments: this.newsArticle.comments.length
+            };
+        }
     }
 
     _onChanged($event) {
