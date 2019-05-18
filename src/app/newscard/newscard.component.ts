@@ -52,3 +52,5 @@ export class NewscardComponent implements OnInit {
     }
 
 }
+
+
