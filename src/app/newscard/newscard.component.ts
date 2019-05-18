@@ -4,6 +4,9 @@ import { Observable, of } from 'rxjs';
 import { NewsActionsData, NewsActionEvent } from '../newscard-actions/newscard-actions.component';
 import { switchMap } from 'rxjs/operators';
 
+export interface NewsCardEvents extends NewsActionEvent {
+    id: string;
+}
 
 @Component({
     selector: 'newscard',
@@ -16,7 +19,7 @@ export class NewscardComponent implements OnInit {
     newsActionData: NewsActionsData;
 
     @Output() onViewArticle: EventEmitter<any> = new EventEmitter();
-    @Output() onChanged: EventEmitter<NewsActionEvent> = new EventEmitter();
+    @Output() onChanged: EventEmitter<NewsCardEvents> = new EventEmitter();
 
     itemSize = 300;
 
@@ -34,12 +37,10 @@ export class NewscardComponent implements OnInit {
     }
 
     _onChanged($event) {
-        //do something
-        this.onChanged.emit($event);
+        this.onChanged.emit({ ...$event, id: this.newsArticle.id });
     }
     _onViewArticle($event) {
-        //do something
-        this.onViewArticle.emit($event);
+        this.onViewArticle.emit({ ...$event, id: this.newsArticle.id });
     }
 
 }

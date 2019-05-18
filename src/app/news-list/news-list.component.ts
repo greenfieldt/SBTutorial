@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/cor
 import { Subscription, Observable } from 'rxjs';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { NewsArticle } from '../shared/news-article';
-import { tap, debounceTime } from 'rxjs/operators';
+import { tap, scan, debounceTime } from 'rxjs/operators';
 import { NewsApiService } from '../shared/news-api.service';
 import { NewsSource } from '../shared/news-source';
 import { NewsActionsData, NewsActionEvent } from '../newscard-actions/newscard-actions.component';
@@ -21,7 +21,7 @@ export class NewsListComponent implements OnInit {
     @Output() onChanged: EventEmitter<NewsActionEvent> = new EventEmitter();
 
     page: number = 1;
-    article$: Observable<NewsArticle>;
+    article$: Observable<NewsArticle[]>;
 
     constructor(private newsService: NewsApiService) {
         const newsSource: NewsSource = {
@@ -34,13 +34,14 @@ export class NewsListComponent implements OnInit {
             url: "http://www.nytimes.com"
         };
 
-        this.article$ = this.newsService.initArticles(newsSource)
+        this.article$ = this.newsService.initArticles(newsSource, 5).pipe(
+            scan((a: NewsArticle[], n: NewsArticle[]) => [...a, ...n], [])
+        );
 
+        this.article$.pipe(tap(x => console.log(x))).subscribe();
     }
 
     trackByIdx(i, newsArticle: NewsArticle) {
-        console.log(i);
-        return i;
         return newsArticle.id;
     }
 
@@ -50,18 +51,11 @@ export class NewsListComponent implements OnInit {
             tap((x) => {
                 const end = this.scrollViewPort.getRenderedRange().end;
                 const total = this.scrollViewPort.getDataLength();
-
-                // console.log("end", end);
-                // console.log("total", total);
-
-
-                // on the first call end and total will be 0
-                // and the page will be already loaded
                 if (end && end === total) {
                     this.page++;
-                    this.newsService.getArticlesByPage(this.page, 50);
+                    console.log(this.page);
+                    this.newsService.getArticlesByPage(this.page, 5);
                 }
-
             })
         ).subscribe());
 

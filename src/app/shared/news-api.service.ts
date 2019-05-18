@@ -16,9 +16,8 @@ export class NewsApiService implements OnDestroy {
     newsSource: NewsSource;
 
     page: number = 0;
-    resultsPerPage: number = 20
 
-    resultStream: Subject<NewsArticle[]> = new Subject();
+    resultStream: Subject<NewsArticle> = new Subject();
 
 
     constructor(private httpClient: HttpClient) {
@@ -35,6 +34,8 @@ export class NewsApiService implements OnDestroy {
         return this.resultStream.asObservable();
     }
 
+
+    static _id = 1;
     getArticlesByPage(page, pagesize = 50) {
         this.httpClient.get('https://newsapi.org/v2/everything?sources='
             + this.newsSource.id
@@ -45,6 +46,7 @@ export class NewsApiService implements OnDestroy {
                 map(articles => {
                     return articles.map((article) => {
                         let _na: NewsArticle = article as NewsArticle;
+                        _na.id = (NewsApiService._id++).toString();
                         _na.numLikes = 0;
                         _na.hasLiked = false;
                         _na.comments = [];
@@ -52,7 +54,7 @@ export class NewsApiService implements OnDestroy {
                         return _na;
                     });
                 }),
-                scan((a: NewsArticle[], n: NewsArticle[]) => [...a, ...n], []),
+                //scan((a: NewsArticle[], n: NewsArticle[]) => [...a, ...n], []),
                 first(), //there is only going to be one of these
                 catchError((error) => {
                     console.log("Http error", error);
