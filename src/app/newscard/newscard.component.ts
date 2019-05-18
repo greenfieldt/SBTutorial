@@ -1,20 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NewsArticle } from '../shared/news-article';
-
-
-export enum NewsCardOrientation {
-    leftToRight = 1,
-    topToBottom,
-    topToBottomSmall
-
-}
-
-export enum NewsCardSize {
-    extraBig = 1,
-    big,
-    small
-}
-
+import { Observable, of } from 'rxjs';
+import { NewsActionsData, NewsActionEvent } from '../newscard-actions/newscard-actions.component';
+import { switchMap } from 'rxjs/operators';
 
 
 @Component({
@@ -24,31 +12,34 @@ export enum NewsCardSize {
 })
 export class NewscardComponent implements OnInit {
 
-    public NewsCardOrientation = NewsCardOrientation;
-    public NewsCardSizeEnum = NewsCardSize;
-    @Input() public newsCardOrientation: NewsCardOrientation
-        = NewsCardOrientation.topToBottom;
-    @Input() public newsCardSize: NewsCardSize = NewsCardSize.big;
-    @Input() newsArticle: NewsArticle;
-
+    @Input() newsArticle$: Observable<NewsArticle>;
+    newsActionData$: Observable<NewsActionsData>;
 
     @Output() onViewArticle: EventEmitter<any> = new EventEmitter();
-    @Output() onStar: EventEmitter<any> = new EventEmitter();
-    @Output() onLiked: EventEmitter<any> = new EventEmitter();
-    @Output() onComment: EventEmitter<any> = new EventEmitter();
+    @Output() onChanged: EventEmitter<NewsActionEvent> = new EventEmitter();
 
     constructor() { }
 
     ngOnInit() {
+        this.newsActionData$ = this.newsArticle$.pipe(
+            switchMap((article: NewsArticle) => {
+                return of({
+                    numLikes: article.numLikes,
+                    hasLiked: false,
+                    stared: article.isStared,
+                    numComments: article.comments.length
+                });
+
+            }));
     }
 
-    _onViewArticle() {
+    _onChanged($event) {
+        //do something
+        this.onChanged.emit($event);
     }
-
-    _onLikeArticle() {
-    }
-
-    _onStarArticle() {
+    _onViewArticle($event) {
+        //do something
+        this.onViewArticle.emit($event);
     }
 
 }

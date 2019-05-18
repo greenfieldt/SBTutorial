@@ -6,16 +6,16 @@ import {
     MatIconModule,
     MatBadgeModule,
 } from '@angular/material';
-import { NewscardActionsComponent } from './newscard-actions.component';
+import { NewscardActionsComponent, newsActionDataDefault } from './newscard-actions.component';
 
 
 
-export const newsCardActions = {
-    onLiked: action('onLiked'),
-    onComment: action('onComment'),
-    onStar: action('onStar'),
+export const newsActions = {
+    onChanged: action('onChanged'),
 };
 
+const data_default = newsActionDataDefault;
+const data_liked = { ...newsActionDataDefault, numLikes: 5 };
 
 storiesOf('News Card Actions', module)
     .addDecorator(
@@ -32,37 +32,23 @@ storiesOf('News Card Actions', module)
     ).add('default', () => {
         return {
             template: `<newscard-actions 
-[numComments]='ncomments'
-[stared]='star'
-(onLiked)="onLiked($event)"
-(onStar)="onStar($event)"
-(onComment)="onComment($event)">
+[data]='data'
+(onChanged)="onChanged($event)">
 </newscard-actions>`,
             props: {
-                ncomments: 3,
-                star: true,
-                onLiked: newsCardActions.onLiked,
-                onComment: newsCardActions.onComment,
-                onStar: newsCardActions.onStar
+                data: data_default,
+                onChanged: newsActions.onChanged,
             },
         };
     }).add('liked by others', () => {
         return {
             template: `<newscard-actions 
-[numComments]='ncomments'
-[stared]='star'
-[numLikes]='5'
-(onLiked)="onLiked($event)"
-(onStar)="onStar($event)"
-(onComment)="onComment($event)">
+[data]='data'
+(onChanged)="onChanged($event)">
 </newscard-actions>`,
             props: {
-                ncomments: 3,
-                star: true,
-                numLikes: 4,
-                onLiked: newsCardActions.onLiked,
-                onComment: newsCardActions.onComment,
-                onStar: newsCardActions.onStar
+                data: data_liked,
+                onChanged: newsActions.onChanged,
             },
         };
     });

@@ -1,16 +1,11 @@
 import { storiesOf, moduleMetadata } from '@storybook/angular';
 import { action } from '@storybook/addon-actions';
+import { of } from 'rxjs';
 
 import {
     MatButtonModule,
     MatCardModule,
-    MatMenuModule,
-    MatToolbarModule,
     MatIconModule,
-    MatSidenavModule,
-    MatListModule,
-    MatFormFieldModule,
-    MatAutocompleteModule,
     MatBadgeModule,
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -18,7 +13,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 //Some data model bits and pieces
 import { NewsArticle } from '../shared/news-article';
-import { NewscardComponent, NewsCardOrientation } from './newscard.component';
+import { newsActions } from '../newscard-actions/newscard-actions.stories';
+import { NewscardComponent } from './newscard.component';
+import { NewscardActionsComponent } from '../newscard-actions/newscard-actions.component';
 
 
 //Test Data
@@ -37,13 +34,11 @@ export const testNewsArticle: NewsArticle = {
     hasLiked: false,
     comments: ['Comment One', 'Comment Two', 'Comment Three'],
     isStared: false,
-}
+};
 
 export const newsCardActions = {
     onViewArticle: action('onViewArticle'),
-    onLiked: action('onLiked'),
-    onComment: action('onComment'),
-    onStar: action('onStar'),
+    ...newsActions
 };
 
 
@@ -52,17 +47,12 @@ storiesOf('Composite/News Card', module)
         moduleMetadata({
             declarations: [
                 NewscardComponent,
+                NewscardActionsComponent
             ],
             imports: [
                 MatButtonModule,
                 MatCardModule,
-                MatMenuModule,
-                MatToolbarModule,
                 MatIconModule,
-                MatSidenavModule,
-                MatListModule,
-                MatFormFieldModule,
-                MatAutocompleteModule,
                 MatBadgeModule,
                 FlexLayoutModule
             ],
@@ -70,21 +60,14 @@ storiesOf('Composite/News Card', module)
     ).add('default', () => {
         return {
             template: `<newscard 
-[newsArticle]="testNewsArticle"
-(onLiked)="onLiked($event)"
+[newsArticle$]="testNewsArticle"
 (onViewArticle)="onViewArticle($event)"
-(onStar)="onStar($event)"
-(onComment)="onComment($event)"
-[newsCardOrientation]="cardOrientation">
+(onChanged)="onChanged($event)">
 </newscard>`,
             props: {
-                testNewsArticle,
-                cardOrientation: NewsCardOrientation.topToBottom,
+                testNewsArticle: of(testNewsArticle),
                 onViewArticle: newsCardActions.onViewArticle,
-                onLiked: newsCardActions.onLiked,
-                onComment: newsCardActions.onComment,
-                onStar: newsCardActions.onStar
-
+                onChanged: newsCardActions.onChanged
             },
         };
     });
