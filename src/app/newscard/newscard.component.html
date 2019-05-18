@@ -1,12 +1,13 @@
-<div *ngIf='newsArticle$ | async as newsArticle'>
-<mat-card fxLayout='column' fxFlex="1 1 auto" class="mat-card">
+<mat-card *ngIf='newsArticle$ | async as newsArticle'
+	  fxLayout='column' fxFlex="1 1 auto" class="mat-card">
+
   <img *ngIf="newsArticle.urlToImage" mat-card-image
        class="mat-card-image" src={{newsArticle.urlToImage}}
        alt="" (click)="_onViewArticle()">
-
+  
   <img *ngIf="!newsArticle.urlToImage" mat-card-image
        class="mat-card-image" src="../../assets/errorImg/cantLoadImg.png" alt="">
-
+  
   <mat-card-header class="hrader-top-to-bottom">
     <mat-card-title class="title">
       {{newsArticle.title}}
@@ -21,16 +22,12 @@
     <p>
       {{newsArticle.description}}
     </p>
-
   </mat-card-content>
-
-  <mat-card-actions class="mat-action-content">
-    <newscard-actions [data]='newsActionData$ | async'
-		      (onChanged)='_onChanged($event)'> </newscard-actions>
-  </mat-card-actions>
-
   
-
+  <mat-card-actions *ngIf='newsActionData$ | async as newsActionData'
+		    class="mat-action-content">
+    <newscard-actions [data]='newsActionData'
+		      (onChanged)='_onChanged($event)'>
+    </newscard-actions>
+  </mat-card-actions>
 </mat-card>
-
-</div>
