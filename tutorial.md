@@ -519,3 +519,6 @@ storiesOf('Composite/News Card', module)
 
 ```
 
+### Add Styling to the Card ###
+Review our progress with story book,  we now have a MatCard taking up
+the whole screen with no actions.
