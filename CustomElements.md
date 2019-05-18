@@ -1,5 +1,4 @@
 **Custom Elements, Angular, and Material Design**
-
 ###### A short introduction to Angular, Custom Elements and Material Design ######
 
 <div class="header-columns">
