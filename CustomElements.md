@@ -1,13 +1,15 @@
-**Turning Our Storybook Component into a Custom Element**
-=====================================
+**Custom Elements, Angular, and Material Design**
+
+###### A short introduction to Angular, Custom Elements and Material Design ######
+
 <div class="header-columns">
     <div class="header-name-date">
 
-**Author:** *Timothy Greenfield* 
+**Author:** *Timothy Greenfield*
 
-**Date:** *??/??/??*
-	</div>
-	<div class="header-author-image">
+**Date:** *5/XX/19*
+</div>
+<div class="header-author-image">
 
 ![The Author](https://firebasestorage.googleapis.com/v0/b/increatesoftware.appspot.com/o/IncreateSoftware%2Ftim.jpg?alt=media&token=8a6dbaff-7b83-484f-9be5-b8436b737878 "The Author")
 	</div>
