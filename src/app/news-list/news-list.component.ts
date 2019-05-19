@@ -26,6 +26,8 @@ export class NewsListComponent implements OnInit {
     @Output() onChanged: EventEmitter<NewsActionEvent> = new EventEmitter();
 
     page: number = 1;
+    cachedSize: number = 0;
+
     articles: NewsArticle[] = [];
     sources$: Observable<NewsSource[]>;
 
@@ -38,7 +40,6 @@ export class NewsListComponent implements OnInit {
         return newsArticle.id;
     }
 
-    cachedSize = 0;
     ngOnInit() {
         console.log(this.newsSourceName);
 
@@ -51,7 +52,6 @@ export class NewsListComponent implements OnInit {
                     return this.newsService
                         .initArticles(_source, this.numFetch).pipe(
                             tap(x => {
-                                //console.log(x);
                                 console.log("Fetching more articles");
                                 this.cachedSize = this.cachedSize + this.numFetch;
                                 this.articles = [...this.articles, ...x];
@@ -60,17 +60,8 @@ export class NewsListComponent implements OnInit {
             })).subscribe());
 
         this.sub.add(this.scrollDispatcher.scrolled().pipe(
-            /*
-                        tap(event => {
-                            console.log(this.scrollViewPort.getRenderedRange());
-                            console.log(this.cachedSize - this.numFetch);
-                        }),
-            */
             filter(event => this.scrollViewPort.getRenderedRange().end
                 >= (this.cachedSize - this.numFetch)),
-            // distinctUntilChanged(),
-
-
         ).subscribe(event => {
             this.page++;
             this.newsService.getArticlesByPage(this.page, this.numFetch);
