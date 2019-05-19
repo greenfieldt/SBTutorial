@@ -18,6 +18,7 @@ import { NewsArticle, NewsActionsData } from '../shared/news-article';
 import { newsActions } from '../newscard-actions/newscard-actions.stories';
 import { NewscardComponent } from './newscard.component';
 import { NewscardActionsComponent } from '../newscard-actions/newscard-actions.component';
+import { withCssResources } from '@storybook/addon-cssresources';
 
 
 //Test Data
@@ -43,6 +44,15 @@ export const newsCardActions = {
 storiesOf('Composite/News Card', module)
     .addDecorator(withA11y)
     .addDecorator(withKnobs)
+    .addDecorator(withCssResources)
+    .addParameters({
+        cssresources: [{
+            id: `card:outline`,
+            code: `<style>.mat-card { border: 1px solid black }</style>`,
+            picked: false,
+        },
+        ],
+    })
     .addDecorator(
         moduleMetadata({
             declarations: [

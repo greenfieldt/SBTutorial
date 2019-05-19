@@ -8,6 +8,7 @@ import {
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { ScrollingModule as ExperimentalScrollingModule } from '@angular/cdk-experimental/scrolling';
 
 import { Observable, of } from 'rxjs';
 import { NewsListComponent } from './news-list.component';
@@ -41,6 +42,7 @@ storiesOf('Composite/News Card List', module)
                 MatBadgeModule,
                 FlexLayoutModule,
                 ScrollingModule,
+                ExperimentalScrollingModule,
                 HttpClientModule
 
             ],
@@ -57,7 +59,7 @@ storiesOf('Composite/News Card List', module)
 </news-list> </div>`,
             props: {
                 newsSource: text('newsSource', 'The New York Times'),
-                numFetch: number('numFetch', 5),
+                numFetch: number('numFetch', 50),
                 onViewArticle: newsCardActions.onViewArticle,
                 onChanged: newsCardActions.onChanged
             },

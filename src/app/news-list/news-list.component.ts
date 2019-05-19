@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { Subscription, Observable, of } from 'rxjs';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { CdkVirtualScrollViewport, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { NewsArticle, NewsActionsData } from '../shared/news-article';
-import { tap, map, scan, filter, debounceTime, switchMap } from 'rxjs/operators';
+import { tap, map, scan, filter, debounceTime, switchMap, distinctUntilChanged } from 'rxjs/operators';
 import { NewsApiService } from '../shared/news-api.service';
 import { NewsSource } from '../shared/news-source';
 import { NewsActionEvent } from '../newscard-actions/newscard-actions.component';
@@ -18,7 +18,7 @@ export class NewsListComponent implements OnInit {
     @ViewChild(CdkVirtualScrollViewport) scrollViewPort: CdkVirtualScrollViewport;
     sub: Subscription = new Subscription();
 
-    @Input() numFetch: number = 5;
+    @Input() numFetch: number = 25;
     @Input() newsSourceName: string = "The New York Times";
 
 
@@ -29,16 +29,16 @@ export class NewsListComponent implements OnInit {
     articles: NewsArticle[] = [];
     sources$: Observable<NewsSource[]>;
 
-    constructor(private newsService: NewsApiService, private changeDet: ChangeDetectorRef) {
-
-
+    constructor(private newsService: NewsApiService,
+        private changeDet: ChangeDetectorRef,
+        private scrollDispatcher: ScrollDispatcher) {
     }
 
     trackByIdx(i, newsArticle: NewsArticle) {
         return newsArticle.id;
     }
 
-
+    cachedSize = 0;
     ngOnInit() {
         console.log(this.newsSourceName);
 
@@ -47,25 +47,34 @@ export class NewsListComponent implements OnInit {
                 const _source =
                     sourceArray.filter((source: NewsSource) => source.name === this.newsSourceName)[0];
                 if (_source) {
+                    this.cachedSize = this.numFetch;
                     return this.newsService
                         .initArticles(_source, this.numFetch).pipe(
                             tap(x => {
+                                //console.log(x);
+                                console.log("Fetching more articles");
+                                this.cachedSize = this.cachedSize + this.numFetch;
                                 this.articles = [...this.articles, ...x];
                             }));
                 } else { return of([]); }
             })).subscribe());
 
-        this.sub.add(this.scrollViewPort.scrolledIndexChange.pipe(
-            debounceTime(100),
-            tap((x) => {
-                const end = this.scrollViewPort.getRenderedRange().end;
-                const total = this.scrollViewPort.getDataLength();
-                if (end && end === total) {
-                    this.page++;
-                    this.newsService.getArticlesByPage(this.page, this.numFetch);
-                }
-            })
-        ).subscribe());
+        this.sub.add(this.scrollDispatcher.scrolled().pipe(
+            /*
+                        tap(event => {
+                            console.log(this.scrollViewPort.getRenderedRange());
+                            console.log(this.cachedSize - this.numFetch);
+                        }),
+            */
+            filter(event => this.scrollViewPort.getRenderedRange().end
+                >= (this.cachedSize - this.numFetch)),
+            // distinctUntilChanged(),
+
+
+        ).subscribe(event => {
+            this.page++;
+            this.newsService.getArticlesByPage(this.page, this.numFetch);
+        }));
 
     }
 

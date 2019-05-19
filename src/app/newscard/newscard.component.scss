@@ -2,35 +2,28 @@
   object-fit: cover;
   width: 100%;
   margin: 0 !important;
-  max-width:50%;
+  max-height:300px;
 }
 
 .mat-card-title {
-  font-size: 13px;
-  font-weight: 500;
-  padding-right: 16px;
-  font-weight: bold;
-
+    font-size: larger;
+    font-weight: 500;
+    padding-right: 16px;
+    font-weight: bold;
 }
 
 .mat-card-content {
-  font-size: 13px;
-  height: 50px;
-  margin-left: 16px;
-  margin-right: 16px;
+    font-size: 13p;
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
+.mat-card-actions {
+    text-align:center;
 }
 
 
 @media screen and (max-width: 911px) {
-  .mat-card-content {
-    font-size: 11px;
-  }
-
-  .mat-card-title {
-
-    font-size: 10px;
-    font-weight: bold;
-  }
 }
 
 
