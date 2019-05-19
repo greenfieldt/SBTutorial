@@ -1,44 +1,46 @@
-<span *ngIf="data.numComments <= 0">
-  <button mat-button color="primary" (click)="_onComment()">
-    <mat-icon>comment</mat-icon>
-  </button>
-</span>
-
-<span *ngIf="data.numComments > 0">
-  <button mat-button color="primary" (click)="_onComment()">
-    <mat-icon matBadge="{{data.numComments}}" matBadgePosition="above before"
-	      matBadgeOverlap="false" matBadgeColor="primary">comment</mat-icon>
-  </button>
-</span>
-
-<span *ngIf="data.numLikes <= 0">
-  <button mat-button color="primary" (click)="_onLiked()">
-    <mat-icon>thumb_up_alt</mat-icon>
-  </button>
-</span>
-
-<span *ngIf="!data.hasLiked && data.numLikes > 0">
-  <button mat-button color="primary" (click)="_onLiked()">
-    <mat-icon matBadge="{{data.numLikes}}" matBadgePosition="above before"
-	      matBadgeOverlap="false" matBadgeColor="primary">thumb_up_alt</mat-icon>
-  </button>
-</span>
-
-<span *ngIf="data.hasLiked && data.numLikes > 0">
-  <button mat-button color="primary" (click)="_onLiked()">
-    <mat-icon matBadge="{{data.numLikes}}" matBadgePosition="above before"
-	      matBadgeOverlap="false" matBadgeColor="accent">thumb_up_alt</mat-icon>
-  </button>
-</span>
-
-<span *ngIf="data.stared">
-  <button mat-button color="primary" (click)="_onStar()">
-    <mat-icon>star</mat-icon>
-  </button>
-</span>
-
-<span *ngIf="!data.stared">
-  <button mat-button color="primary" (click)="_onStar()">
-    <mat-icon>star_outline</mat-icon>
-  </button>
-</span>
+<div class='actions'>
+  <span *ngIf="data.numComments <= 0">
+    <button mat-button color="primary" (click)="_onComment()">
+      <mat-icon>comment</mat-icon>
+    </button>
+  </span>
+  
+  <span *ngIf="data.numComments > 0">
+    <button mat-button color="primary" (click)="_onComment()">
+      <mat-icon matBadge="{{data.numComments}}" matBadgePosition="above before"
+		matBadgeOverlap="false" matBadgeColor="primary">comment</mat-icon>
+    </button>
+  </span>
+  
+  <span *ngIf="data.numLikes <= 0">
+    <button mat-button color="primary" (click)="_onLiked()">
+      <mat-icon>thumb_up_alt</mat-icon>
+    </button>
+  </span>
+  
+  <span *ngIf="!data.hasLiked && data.numLikes > 0">
+    <button mat-button color="primary" (click)="_onLiked()">
+      <mat-icon matBadge="{{data.numLikes}}" matBadgePosition="above before"
+		matBadgeOverlap="false" matBadgeColor="primary">thumb_up_alt</mat-icon>
+    </button>
+  </span>
+  
+  <span *ngIf="data.hasLiked && data.numLikes > 0">
+    <button mat-button color="primary" (click)="_onLiked()">
+      <mat-icon matBadge="{{data.numLikes}}" matBadgePosition="above before"
+		matBadgeOverlap="false" matBadgeColor="accent">thumb_up_alt</mat-icon>
+    </button>
+  </span>
+  
+  <span *ngIf="data.stared">
+    <button mat-button color="primary" (click)="_onStar()">
+      <mat-icon>star</mat-icon>
+    </button>
+  </span>
+  
+  <span *ngIf="!data.stared">
+    <button mat-button color="primary" (click)="_onStar()">
+      <mat-icon>star_outline</mat-icon>
+    </button>
+  </span>
+</div>

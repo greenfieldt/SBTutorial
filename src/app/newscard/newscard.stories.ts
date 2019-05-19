@@ -9,6 +9,8 @@ import {
     MatBadgeModule,
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { withA11y } from '@storybook/addon-a11y';
+import { object, withKnobs } from '@storybook/addon-knobs';
 
 
 //Some data model bits and pieces
@@ -39,6 +41,8 @@ export const newsCardActions = {
 
 
 storiesOf('Composite/News Card', module)
+    .addDecorator(withA11y)
+    .addDecorator(withKnobs)
     .addDecorator(
         moduleMetadata({
             declarations: [
@@ -61,7 +65,7 @@ storiesOf('Composite/News Card', module)
 (onChanged)="onChanged($event)">
 </newscard>`,
             props: {
-                testNewsArticle: testNewsArticle,
+                testNewsArticle: object('testNewsArticle', testNewsArticle),
                 onViewArticle: newsCardActions.onViewArticle,
                 onChanged: newsCardActions.onChanged
             },

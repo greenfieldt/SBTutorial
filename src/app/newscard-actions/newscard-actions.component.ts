@@ -6,9 +6,6 @@ export class NewsActionEvent extends NewsActionsData {
     action: string;
 }
 
-
-
-
 @Component({
     selector: 'newscard-actions',
     templateUrl: './newscard-actions.component.html',
