@@ -7,7 +7,6 @@ import { NewsApiService } from '../shared/news-api.service';
 import { NewsSource } from '../shared/news-source';
 import { NewsActionEvent } from '../newscard-actions/newscard-actions.component';
 import { NewsCardEvents } from '../newscard/newscard.component';
-import { produce } from 'immer';
 
 @Component({
     selector: 'news-list',
@@ -75,13 +74,8 @@ export class NewsListComponent implements OnInit {
     }
 
     _onChanged($event: NewsCardEvents) {
-        const nextState = produce(this.articles, draft => {
-            const idx = draft.findIndex(x => x.id === $event.id);
-            draft[idx].newsActionData = ($event as NewsActionsData);
-        });
-
-        this.articles = nextState;
-        this.changeDet.detectChanges();
+        const idx = this.articles.findIndex(x => x.id === $event.id);
+        this.articles[idx].newsActionData = ($event as NewsActionsData);
         this.onChanged.emit($event);
     }
     _onViewArticle($event) {
