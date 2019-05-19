@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, of, Subscription } from 'rxjs';
 import { first, map, tap, scan, catchError } from 'rxjs/operators'
 import { forEach } from '@angular/router/src/utils/collection';
-import { NewsArticle } from './news-article';
+import { NewsArticle, NewsActionsData } from './news-article';
 import { NewsSource } from './news-source';
 
 
@@ -18,7 +18,7 @@ export class NewsApiService implements OnDestroy {
 
     page: number = 0;
 
-    resultStream: Subject<NewsArticle> = new Subject();
+    resultStream: Subject<NewsArticle[]> = new Subject();
     private cachedSources$: Observable<any>;
 
 
@@ -31,9 +31,9 @@ export class NewsApiService implements OnDestroy {
         this.resultStream.complete();
     }
 
-    initSources(): Observable<any> {
+    initSources(): Observable<NewsSource[]> {
         return this.cachedSources$.pipe(
-            map(data => data['sources'] as NewsSource));
+            map(data => data['sources'] as NewsSource[]));
     }
 
     initArticles(id: NewsSource, pagesize = 50): Observable<any> {
@@ -44,7 +44,7 @@ export class NewsApiService implements OnDestroy {
     }
 
 
-    static _id = 1;
+    _id = 1;
     getArticlesByPage(page, pagesize = 50) {
         this.httpClient.get('https://newsapi.org/v2/everything?sources='
             + this.newsSource.id
@@ -55,11 +55,8 @@ export class NewsApiService implements OnDestroy {
                 map(articles => {
                     return articles.map((article) => {
                         let _na: NewsArticle = article as NewsArticle;
-                        _na.id = (NewsApiService._id++).toString();
-                        _na.numLikes = 0;
-                        _na.hasLiked = false;
-                        _na.comments = [];
-                        _na.isStared = false;
+                        _na.id = (this._id++).toString();
+                        _na.newsActionData = new NewsActionsData();
                         return _na;
                     });
                 }),

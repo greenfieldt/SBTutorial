@@ -3,6 +3,13 @@ export class Source {
     name: string = "";
 }
 
+export class NewsActionsData {
+    numComments: number = 0;
+    numLikes: number = 0;
+    hasLiked: boolean = false;
+    stared: boolean = false;
+}
+
 
 export class NewsArticle_NewsApiV2 {
     author: string = "";
@@ -18,12 +25,7 @@ export class NewsArticle_NewsApiV2 {
 export class NewsArticle extends NewsArticle_NewsApiV2 {
 
     id: string = "";
-    sourceImage: string = "";
-    hasLiked: boolean = false;
-    comments: string[] = [];
-    isStared: boolean = false;
-    numLikes: number = 0;
-
+    newsActionData: NewsActionsData;
 }
 
 

@@ -1,20 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { NewsActionsData } from '../shared/news-article';
 
-export interface NewsActionsData {
-    numComments: number;
-    numLikes: number;
-    hasLiked: boolean;
-    stared: boolean;
-}
 
-export const newsActionDataDefault: NewsActionsData = {
-    numComments: 0,
-    numLikes: 0,
-    hasLiked: false,
-    stared: false
-};
-
-export interface NewsActionEvent extends NewsActionsData {
+export class NewsActionEvent extends NewsActionsData {
     action: string;
 }
 
@@ -27,34 +15,38 @@ export interface NewsActionEvent extends NewsActionsData {
     styleUrls: ['./newscard-actions.component.scss']
 })
 export class NewscardActionsComponent implements OnInit {
+    @Input() data: NewsActionsData = new NewsActionsData();
+    @Output() onChanged: EventEmitter<NewsActionEvent> = new EventEmitter();
 
     constructor() { }
     ngOnInit() { }
 
-    @Input() data: NewsActionsData = newsActionDataDefault;
-    @Output() onChanged: EventEmitter<NewsActionEvent> = new EventEmitter();
 
 
     _onComment() {
-        this.data.numComments++;
-        this.onChanged.emit({ ...this.data, action: 'onComment' });
+        const _data = { ...this.data, action: 'onComment' };
+        _data.numComments++;
+        this.onChanged.emit(_data);
 
     }
     _onLiked() {
-        if (this.data.hasLiked) {
-            this.data.hasLiked = false;
-            this.data.numLikes--;
+        const _data = { ...this.data, action: 'onLiked' };
+
+        if (_data.hasLiked) {
+            _data.hasLiked = false;
+            _data.numLikes--;
         }
         else {
-            this.data.hasLiked = true;
-            this.data.numLikes++;
+            _data.hasLiked = true;
+            _data.numLikes++;
         }
 
-        this.onChanged.emit({ ...this.data, action: 'onLiked' });
+        this.onChanged.emit(_data);
     }
     _onStar() {
-        this.data.stared = !this.data.stared;
-        this.onChanged.emit({ ...this.data, action: 'onStar' });
+        const _data = { ...this.data, action: 'onStar' };
+        _data.stared = !_data.stared;
+        this.onChanged.emit(_data);
     }
 
 

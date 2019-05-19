@@ -1,12 +1,13 @@
-import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { Subscription, Observable, of } from 'rxjs';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { NewsArticle } from '../shared/news-article';
+import { NewsArticle, NewsActionsData } from '../shared/news-article';
 import { tap, map, scan, filter, debounceTime, switchMap } from 'rxjs/operators';
 import { NewsApiService } from '../shared/news-api.service';
 import { NewsSource } from '../shared/news-source';
-import { NewsActionsData, NewsActionEvent } from '../newscard-actions/newscard-actions.component';
-
+import { NewsActionEvent } from '../newscard-actions/newscard-actions.component';
+import { NewsCardEvents } from '../newscard/newscard.component';
+import { produce } from 'immer';
 
 @Component({
     selector: 'news-list',
@@ -26,10 +27,10 @@ export class NewsListComponent implements OnInit {
     @Output() onChanged: EventEmitter<NewsActionEvent> = new EventEmitter();
 
     page: number = 1;
-    article$: Observable<NewsArticle[]>;
+    articles: NewsArticle[] = [];
     sources$: Observable<NewsSource[]>;
 
-    constructor(private newsService: NewsApiService) {
+    constructor(private newsService: NewsApiService, private changeDet: ChangeDetectorRef) {
 
 
     }
@@ -38,27 +39,22 @@ export class NewsListComponent implements OnInit {
         return newsArticle.id;
     }
 
+
     ngOnInit() {
         console.log(this.newsSourceName);
-        this.article$ = this.newsService.initSources().pipe(
+
+        this.sub.add(this.newsService.initSources().pipe(
             switchMap((sourceArray: NewsSource[]) => {
                 const _source =
                     sourceArray.filter((source: NewsSource) => source.name === this.newsSourceName)[0];
                 if (_source) {
                     return this.newsService
                         .initArticles(_source, this.numFetch).pipe(
-                            scan((a: NewsArticle[], n: NewsArticle[]) => [...a, ...n], [])
-                        );
-                }
-                else {
-                    return of([]);
-                }
-
-            }),
-        );
-
-
-        this.sub.add(this.article$.pipe(tap(x => console.log(x))).subscribe());
+                            tap(x => {
+                                this.articles = [...this.articles, ...x];
+                            }));
+                } else { return of([]); }
+            })).subscribe());
 
         this.sub.add(this.scrollViewPort.scrolledIndexChange.pipe(
             debounceTime(100),
@@ -78,8 +74,14 @@ export class NewsListComponent implements OnInit {
         this.sub.unsubscribe();
     }
 
-    _onChanged($event) {
-        //do something
+    _onChanged($event: NewsCardEvents) {
+        const nextState = produce(this.articles, draft => {
+            const idx = draft.findIndex(x => x.id === $event.id);
+            draft[idx].newsActionData = ($event as NewsActionsData);
+        });
+
+        this.articles = nextState;
+        this.changeDet.detectChanges();
         this.onChanged.emit($event);
     }
     _onViewArticle($event) {

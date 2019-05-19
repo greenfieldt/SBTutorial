@@ -1,8 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NewsArticle } from '../shared/news-article';
 import { Observable, of } from 'rxjs';
-import { NewsActionsData, NewsActionEvent } from '../newscard-actions/newscard-actions.component';
-import { switchMap } from 'rxjs/operators';
+import { NewsActionEvent } from '../newscard-actions/newscard-actions.component';
 
 export interface NewsCardEvents extends NewsActionEvent {
     id: string;
@@ -16,7 +15,6 @@ export interface NewsCardEvents extends NewsActionEvent {
 export class NewscardComponent implements OnInit {
 
     @Input() newsArticle: NewsArticle;
-    newsActionData: NewsActionsData;
 
     @Output() onViewArticle: EventEmitter<any> = new EventEmitter();
     @Output() onChanged: EventEmitter<NewsCardEvents> = new EventEmitter();
@@ -26,14 +24,6 @@ export class NewscardComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
-        if (this.newsArticle) {
-            this.newsActionData = {
-                numLikes: this.newsArticle.numLikes,
-                hasLiked: false,
-                stared: this.newsArticle.isStared,
-                numComments: this.newsArticle.comments.length
-            };
-        }
     }
 
     _onChanged($event) {

@@ -6,7 +6,8 @@ import {
     MatIconModule,
     MatBadgeModule,
 } from '@angular/material';
-import { NewscardActionsComponent, newsActionDataDefault } from './newscard-actions.component';
+import { NewscardActionsComponent } from './newscard-actions.component';
+import { NewsActionsData } from '../shared/news-article';
 
 
 
@@ -14,8 +15,8 @@ export const newsActions = {
     onChanged: action('onChanged'),
 };
 
-const data_default = newsActionDataDefault;
-const data_liked = { ...newsActionDataDefault, numLikes: 5 };
+const data_default = new NewsActionsData();
+const data_liked = { ...data_default, numLikes: 5 };
 
 storiesOf('News Card Actions', module)
     .addDecorator(
