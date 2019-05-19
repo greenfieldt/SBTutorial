@@ -88,7 +88,6 @@ export class NewsListComponent implements OnInit {
         this.onChanged.emit($event);
     }
     _onViewArticle($event) {
-        //do something
         this.onViewArticle.emit($event);
     }
 

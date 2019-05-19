@@ -1,16 +1,11 @@
+//defines a News Source -- i.e., The New York Times
 export class Source {
     id: string = "";
     name: string = "";
 }
 
-export class NewsActionsData {
-    numComments: number = 0;
-    numLikes: number = 0;
-    hasLiked: boolean = false;
-    stared: boolean = false;
-}
 
-
+//Defines the data returned from the NesAPI V2
 export class NewsArticle_NewsApiV2 {
     author: string = "";
     content: string = "";
@@ -22,6 +17,19 @@ export class NewsArticle_NewsApiV2 {
     urlToImage: string = ""
 }
 
+
+//defines the props that NewscardActions will display and
+//modify 
+export class NewsActionsData {
+    numComments: number = 0;
+    numLikes: number = 0;
+    hasLiked: boolean = false;
+    stared: boolean = false;
+}
+
+
+//Extends the NewsAPI wtih data local to the current
+//execution 
 export class NewsArticle extends NewsArticle_NewsApiV2 {
 
     id: string = "";

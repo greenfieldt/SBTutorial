@@ -19,8 +19,6 @@ export class NewscardComponent implements OnInit {
     @Output() onViewArticle: EventEmitter<any> = new EventEmitter();
     @Output() onChanged: EventEmitter<NewsCardEvents> = new EventEmitter();
 
-    itemSize = 300;
-
     constructor() { }
 
     ngOnInit() {
