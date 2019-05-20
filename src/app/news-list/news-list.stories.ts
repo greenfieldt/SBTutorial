@@ -55,9 +55,11 @@ storiesOf('Composite/News Card List', module)
 [newsSourceName]="newsSource"
 [numFetch]="numFetch"
 (onViewArticle)="onViewArticle($event)"
+[newsAPIKey]="newsAPIKey"
 (onChanged)="onChanged($event)">
 </news-list> </div>`,
             props: {
+                newsAPIKey: text('newsAPIKey', '22d9615962774038a7fda97bb5b8ca2f'),
                 newsSource: text('newsSource', 'The New York Times'),
                 numFetch: number('numFetch', 50),
                 onViewArticle: newsCardActions.onViewArticle,

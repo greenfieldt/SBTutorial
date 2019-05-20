@@ -19,7 +19,7 @@ export const newsActions = {
 };
 
 const data_default = new NewsActionsData();
-const data_liked = { ...data_default, numLikes: 5 };
+const data_liked = { ...data_default, hasLiked: true, numLikes: 5 };
 
 storiesOf('News Card Actions', module)
     .addDecorator(withA11y)

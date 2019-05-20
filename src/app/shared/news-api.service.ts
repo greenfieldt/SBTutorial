@@ -7,7 +7,6 @@ import { NewsArticle, NewsActionsData } from './news-article';
 import { NewsSource } from './news-source';
 
 
-const apiKey = '22d9615962774038a7fda97bb5b8ca2f';
 
 
 @Injectable({
@@ -15,6 +14,7 @@ const apiKey = '22d9615962774038a7fda97bb5b8ca2f';
 })
 export class NewsApiService implements OnDestroy {
     newsSource: NewsSource;
+    apiKey: string = '';
 
     page: number = 0;
 
@@ -23,20 +23,34 @@ export class NewsApiService implements OnDestroy {
 
 
     constructor(private httpClient: HttpClient) {
-        this.cachedSources$ = this.httpClient
-            .get('https://newsapi.org/v2/sources?apiKey=' + apiKey);
     }
 
     ngOnDestroy() {
         this.resultStream.complete();
     }
 
+    setAPIKey(_apiKey: string) {
+        this.apiKey = _apiKey;
+    }
+
     initSources(): Observable<NewsSource[]> {
+        if (this.apiKey === '') {
+            throw new Error("You must provide a News API Key");
+        }
+
+        if (!this.cachedSources$) {
+            this.cachedSources$ = this.httpClient
+                .get('https://newsapi.org/v2/sources?apiKey=' + this.apiKey);
+        }
         return this.cachedSources$.pipe(
             map(data => data['sources'] as NewsSource[]));
     }
 
     initArticles(id: NewsSource, pagesize = 50): Observable<any> {
+        if (this.apiKey === '') {
+            throw new Error("You must provide a News API Key");
+        }
+
         this.newsSource = id;
         //news-api.org requires you to start pagination on page 1
         this.getArticlesByPage(1, pagesize);
@@ -50,7 +64,7 @@ export class NewsApiService implements OnDestroy {
             + this.newsSource.id
             + '&pageSize=' + pagesize
             + '&page=' + page
-            + '&apiKey=' + apiKey).pipe(
+            + '&apiKey=' + this.apiKey).pipe(
                 map(data => data['articles']),
                 map(articles => {
                     return articles.map((article) => {

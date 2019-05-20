@@ -20,7 +20,7 @@ export class NewsListComponent implements OnInit {
 
     @Input() numFetch: number = 25;
     @Input() newsSourceName: string = "The New York Times";
-
+    @Input() newsAPIKey: '';
 
     @Output() onViewArticle: EventEmitter<any> = new EventEmitter();
     @Output() onChanged: EventEmitter<NewsActionEvent> = new EventEmitter();
@@ -42,7 +42,9 @@ export class NewsListComponent implements OnInit {
 
     ngOnInit() {
         console.log(this.newsSourceName);
-
+        if (this.newsAPIKey) {
+            this.newsService.setAPIKey(this.newsAPIKey);
+        }
         this.sub.add(this.newsService.initSources().pipe(
             switchMap((sourceArray: NewsSource[]) => {
                 const _source =
@@ -61,7 +63,7 @@ export class NewsListComponent implements OnInit {
 
         this.sub.add(this.scrollDispatcher.scrolled().pipe(
             filter(event => this.scrollViewPort.getRenderedRange().end
-                >= (this.cachedSize - this.numFetch)),
+                >= (this.cachedSize - this.numFetch) && this.cachedSize > 0),
         ).subscribe(event => {
             this.page++;
             this.newsService.getArticlesByPage(this.page, this.numFetch);
@@ -79,6 +81,8 @@ export class NewsListComponent implements OnInit {
         this.onChanged.emit($event);
     }
     _onViewArticle($event) {
+        const idx = this.articles.findIndex(x => x.id === $event.id);
+        window.open(this.articles[idx].url, "_blank");
         this.onViewArticle.emit($event);
     }
 

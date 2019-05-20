@@ -1,0 +1,29 @@
+runtime: python27
+threadsafe: true
+api_version: 1
+
+
+default_expiration: "10m"
+
+skip_files:
+- ^(?!storybook-static)  # Skip any files not in the dist folder
+
+handlers:
+
+
+- url: /(.*\.(gif|png|jpeg|jpg|css|js|ico|json|webmanifest|svg))$
+  static_files: storybook-static/\1
+  upload: storybook-static/(.*)
+  secure: always
+
+- url: /iframe.html
+  static_files: storybook-static/iframe.html
+  upload: storybook-static/iframe.html
+  expiration: 10m
+
+- url: /(.*)
+  static_files: storybook-static/index.html
+  upload: storybook-static/index.html
+  expiration: 10m
+  secure: always
+

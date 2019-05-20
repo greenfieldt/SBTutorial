@@ -39,6 +39,11 @@ displays an infinite list of current news articles using
   * NGXS
   * Angular Material
 
+#### Final Product ####
+
+[Storybook](https://storybook.increate.co/ "Storybook")
+[Github](https://github.com/greenfieldt/SBTutorial "Github")
+
 ## Install Storybook ##
 Our first step will be to start a new angular project.  For this
 project we will not use angular routing and we will select SCSS as our

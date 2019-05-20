@@ -24,14 +24,14 @@ import { withCssResources } from '@storybook/addon-cssresources';
 //Test Data
 export const testNewsArticle: NewsArticle = {
     id: '12345657890987654321',
-    author: 'SARA BONISTEEL',
-    content: 'The use of custard powder an instant custard mix, which was a pantry staple of the empire, devised for those with egg allergies gave their new dainty its distinctive yellow belt Around the same time, bakers in Canadas prairie provinces were serving up a sim… [+1067 chars]',
+    author: 'ANGELA WATERCUTTER',
+    content: "Bryan Bundesen posted a picture of his sister Tabatha's cat, Tardar Sauce, an 11-month old tabby with feline dwarfism that perpetually looked annoyed. The internet was enraptured with Grumpy Cat.",
     publishedAt: new Date('2019-03-22T16:33:58Z'),
-    title: 'Wait, How Did You Get Into College?',
-    source: { id: 'the-new-york-times', name: 'The New York Times' },
-    description: 'How first-generation students learn about the myth of meritocracy.',
-    urlToImage: 'https://pixel.nymag.com/imgs/daily/intelligencer/2019/03/26/26-robert-mueller.w700.h467.jpg',
-    url: 'https://www.nytimes.com/2019/03/16/opinion/sunday/college-admissions-merit.html',
+    title: "Death of Grumpy Cat Marks the End of the Joyful Internet",
+    source: { id: 'wired', name: 'Wired' },
+    description: 'Tardar Sauce was an avatar of the days of the goofy web.',
+    urlToImage: 'https://media.wired.com/photos/5cded55c2c90a35c66b7dacf/191:100/pass/Culture_GrumpyCat_Obit-484518362.jpg',
+    url: 'https://www.wired.com/story/grumpy-cat-obit/',
     newsActionData: new NewsActionsData()
 };
 
