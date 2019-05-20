@@ -41,8 +41,10 @@ displays an infinite list of current news articles using
 
 #### Final Product ####
 
-[Storybook](https://storybook.increate.co/ "Storybook")
-[Github](https://github.com/greenfieldt/SBTutorial "Github")
+
+  * [Storybook Project](https://storybook.increate.co/ "Storybook Project")
+
+  * [Github Code](https://github.com/greenfieldt/SBTutorial "Github Code")
 
 ## Install Storybook ##
 Our first step will be to start a new angular project.  For this
