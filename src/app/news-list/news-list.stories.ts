@@ -1,4 +1,6 @@
 import { storiesOf, moduleMetadata, addDecorator } from '@storybook/angular';
+import { Component } from '@angular/core';
+
 import {
     MatButtonModule,
     MatCardModule,
@@ -19,15 +21,30 @@ import { NewscardActionsComponent } from '../newscard-actions/newscard-actions.c
 import { HttpClientModule } from '@angular/common/http';
 import { newsCardActions } from '../newscard/newscard.stories';
 
-import { withA11y } from '@storybook/addon-a11y';
-import { text, number, withKnobs } from '@storybook/addon-knobs';
+import { text, number } from '@storybook/addon-knobs';
+
+
+//HMR tick to inject state
+@Component({
+    template: `<div class='theme-wrapper default-theme'> 
+<news-list
+[newsSourceName]="newsSource"
+[numFetch]="numFetch"
+(onViewArticle)="onViewArticle($event)"
+[newsAPIKey]="newsAPIKey"
+(onChanged)="onChanged($event)">
+</news-list> </div>`,
+})
+class HostDispatchComponent {
+    constructor() {
+        //Inject your state here
+    }
+}
 
 
 
 
 storiesOf('Composite/News Card List', module)
-    .addDecorator(withA11y)
-    .addDecorator(withKnobs)
     .addDecorator(
         moduleMetadata({
             declarations: [
@@ -48,7 +65,7 @@ storiesOf('Composite/News Card List', module)
             ],
         }),
     )
-    .add('default', () => {
+    .add('default as template', () => {
         return {
             template: `<div class='theme-wrapper default-theme'> 
 <news-list
@@ -66,4 +83,16 @@ storiesOf('Composite/News Card List', module)
                 onChanged: newsCardActions.onChanged
             },
         };
+    }).add('default as component', () => {
+        return {
+            component: HostDispatchComponent,
+            props: {
+                newsAPIKey: text('newsAPIKey', '22d9615962774038a7fda97bb5b8ca2f'),
+                newsSource: text('newsSource', 'Wired'),
+                numFetch: number('numFetch', 50),
+                onViewArticle: newsCardActions.onViewArticle,
+                onChanged: newsCardActions.onChanged
+            },
+        };
     });
+

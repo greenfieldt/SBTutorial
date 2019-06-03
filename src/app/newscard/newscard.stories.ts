@@ -9,8 +9,7 @@ import {
     MatBadgeModule,
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { withA11y } from '@storybook/addon-a11y';
-import { object, withKnobs } from '@storybook/addon-knobs';
+import { object } from '@storybook/addon-knobs';
 
 
 //Some data model bits and pieces
@@ -18,7 +17,6 @@ import { NewsArticle, NewsActionsData } from '../shared/news-article';
 import { newsActions } from '../newscard-actions/newscard-actions.stories';
 import { NewscardComponent } from './newscard.component';
 import { NewscardActionsComponent } from '../newscard-actions/newscard-actions.component';
-import { withCssResources } from '@storybook/addon-cssresources';
 
 
 //Test Data
@@ -42,17 +40,6 @@ export const newsCardActions = {
 
 
 storiesOf('Composite/News Card', module)
-    .addDecorator(withA11y)
-    .addDecorator(withKnobs)
-    .addDecorator(withCssResources)
-    .addParameters({
-        cssresources: [{
-            id: `card:outline`,
-            code: `<style>.mat-card { border: 1px solid black }</style>`,
-            picked: false,
-        },
-        ],
-    })
     .addDecorator(
         moduleMetadata({
             declarations: [

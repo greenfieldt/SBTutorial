@@ -107,7 +107,8 @@ the excludes array
 stories get loaded
 
 
-  * Storybook created a .storybook/addons.js file that does something?
+  * Storybook created a .storybook/addons.js file that allows you to
+    initialize addons.
 
 
 Test it out by `npm run storybook` and opening http://localhost:6006
@@ -351,6 +352,7 @@ All of these will start from the same basic
 template. As I mentioned before I like to put my stories files at the
 same level of my components so I end up with directories that look
 like this.
+
 ```
 ~/Src/Angular/tutorials/storybook/src/app/newscard-actions $ ls -la
 total 6
@@ -363,6 +365,12 @@ drwxr-xr-x  11 tim            staff     352 2019-05-19 11:33 ..
 -rw-r--r--   1 tim            staff    1935 2019-05-19 10:49 newscard-actions.stories.ts
 ~/Src/Angular/tutorials/storybook/src/app/newscard-actions $ 
 ```
+
+At the end of this tutorial I'll show you how to move the add-on
+decorators out of the individual components and into
+.storybook/config.js
+
+
 
 ## NewscardActions ##
 This component will display three buttons that will allow the user to
@@ -1056,3 +1064,94 @@ storiesOf('Composite/News Card List', module)
 ```
 
 ## Wrapping Up ##
+
+#### Going Global ####
+We've been putting our AddOn decorators in individual story files but
+that will get old fast.  We may also need a way to wrap our components
+in some global html.  Both of these goals can be accomlished in
+.storybook/config.js
+
+
+
+```typescript
+import { configure, addDecorator, addParameters } from '@storybook/angular';
+import '@storybook/addon-console';
+import { setConsoleOptions } from '@storybook/addon-console';
+import { withA11y } from '@storybook/addon-a11y';
+import { withKnobs } from '@storybook/addon-knobs';
+import { withCssResources } from '@storybook/addon-cssresources';
+
+
+setConsoleOptions({
+  panelExclude: [],  
+});
+
+
+//wrap angular components in some other html -- as long as you use
+//the template method
+const storyAsString = (story) => 
+	`<div class="theme-wrapper default-theme">${story}</div>`;
+
+const storyAsNode = (story) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'theme-wrapper default-theme';
+    wrapper.appendChild(story);
+    return wrapper;
+};
+
+addDecorator(story => {
+    const tale = story();
+
+    if(typeof tale === "string")
+    {
+		return  storyAsString(tale);
+    }
+    else if(typeof tale === "node")
+    {
+		return storyAsNode(tale);
+    }
+    else if(tale && tale.component)
+    {
+		//what do we do here
+		return tale;
+    }
+    else if (tale && tale.template)
+    {
+		tale.template = storyAsString(tale.template);
+		return tale;
+    }
+    else
+    {
+		return tale;
+    }
+});
+
+//add our global decorators, now we don't need to do it 
+//in every story
+
+addDecorator(withA11y);
+addDecorator(withKnobs);
+addDecorator(withCssResources);
+addParameters({
+    cssresources: [
+	{
+            id: `actions:outline`,
+            code: `<style>.actions { border: 1px solid black; }</style>`,
+            picked: false,
+	},
+	{
+            id: `card:outline`,
+            code: `<style>.mat-card { border: 1px solid black }</style>`,
+            picked: false,
+        },
+		  ],
+});
+
+//Look for our stories in the same place as our components
+const req = require.context('../src/', true, /\.stories.ts$/);
+function loadStories() {
+  req.keys().forEach(filename => req(filename));
+}
+
+configure(loadStories, module);
+```
