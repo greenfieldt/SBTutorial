@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "rm -rf storybook-static && build-storybook -c .storybook -o storybook-static"
+    "build-storybook": "build-storybook"
   },
   "private": true,
   "dependencies": {
@@ -33,20 +33,20 @@
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"
   },
-    "devDependencies": {
+  "devDependencies": {
     "@angular-devkit/build-angular": "~0.12.0",
     "@angular/cli": "~7.2.2",
     "@angular/compiler-cli": "~7.2.0",
     "@angular/language-service": "~7.2.0",
     "@babel/core": "^7.4.4",
-    "@storybook/addon-actions": "^5.0.11",
+    "@storybook/addon-actions": "^5.1.9",
     "@storybook/addon-console": "^1.1.0",
     "@storybook/addon-cssresources": "^5.0.11",
-    "@storybook/addon-links": "^5.0.11",
-    "@storybook/addon-notes": "^5.0.11",
+    "@storybook/addon-links": "^5.1.9",
+    "@storybook/addon-notes": "^5.1.9",
     "@storybook/addon-viewport": "^5.0.11",
-    "@storybook/addons": "^5.0.11",
-    "@storybook/angular": "^5.0.11",
+    "@storybook/addons": "^5.1.9",
+    "@storybook/angular": "^5.1.9",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
