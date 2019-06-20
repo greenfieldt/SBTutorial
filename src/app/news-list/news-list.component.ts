@@ -18,8 +18,8 @@ export class NewsListComponent implements OnInit {
     @ViewChild(CdkVirtualScrollViewport) scrollViewPort: CdkVirtualScrollViewport;
     sub: Subscription = new Subscription();
 
-    @Input() numFetch: number = 25;
-    @Input() newsSourceName: string = "The New York Times";
+    @Input() numFetch: number = 5;
+    @Input() newsSourceName: string = 'The New York Times';
     @Input() newsAPIKey: '';
 
     @Output() onViewArticle: EventEmitter<any> = new EventEmitter();
@@ -56,19 +56,22 @@ export class NewsListComponent implements OnInit {
                             tap(x => {
                                 console.log("Fetching more articles");
                                 this.cachedSize = this.cachedSize + this.numFetch;
-                                this.articles = [...this.articles, ...x];
+                                this.articles = x;
                             }));
                 } else { return of([]); }
             })).subscribe());
 
-        this.sub.add(this.scrollDispatcher.scrolled().pipe(
-            filter(event => this.scrollViewPort.getRenderedRange().end
-                >= (this.cachedSize - this.numFetch) && this.cachedSize > 0),
-        ).subscribe(event => {
-            this.page++;
-            this.newsService.getArticlesByPage(this.page, this.numFetch);
-        }));
-
+        this.sub.add(this.scrollViewPort.scrolledIndexChange.pipe(
+            debounceTime(100),
+            tap((x) => {
+                const end = this.scrollViewPort.getRenderedRange().end;
+                const total = this.scrollViewPort.getDataLength();
+                if (end && end === total) {
+                    this.page++;
+                    this.newsService.getArticlesByPage(this.page, this.numFetch);
+                }
+            })
+        ).subscribe());
     }
 
     ngOnDestory() {
@@ -87,3 +90,19 @@ export class NewsListComponent implements OnInit {
     }
 
 }
+
+
+
+
+
+
+
+/*
+        this.sub.add(this.scrollDispatcher.scrolled().pipe(
+            filter(event => this.scrollViewPort.getRenderedRange().end
+                >= (this.cachedSize - this.numFetch) && this.cachedSize > 0),
+        ).subscribe(event => {
+            this.page++;
+            this.newsService.getArticlesByPage(this.page, this.numFetch);
+        }));
+*/

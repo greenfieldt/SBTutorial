@@ -25,7 +25,7 @@ export class NewscardComponent implements OnInit {
     }
 
     _onChanged($event) {
-        this.onChanged.emit({ ...$event, id: this.newsArticle.id });
+        this.onChanged.emit({ ...$event });
     }
     _onViewArticle($event) {
         this.onViewArticle.emit({ ...$event, id: this.newsArticle.id });
