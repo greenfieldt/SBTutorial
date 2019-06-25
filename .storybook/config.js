@@ -1,15 +1,20 @@
 import { configure, addDecorator, addParameters } from '@storybook/angular';
 import '@storybook/addon-console';
+/*
 import { setConsoleOptions } from '@storybook/addon-console';
 import { withA11y } from '@storybook/addon-a11y';
 import { withKnobs } from '@storybook/addon-knobs';
 import { withCssResources } from '@storybook/addon-cssresources';
+*/
 
 
+/*
 setConsoleOptions({
   panelExclude: [],
 });
+*/
 
+/*
 const storyAsString = (story) => `<div class="theme-wrapper default-theme">${story}</div>`;
 const storyAsNode = (story) => {
     const wrapper = document.createElement('div');
@@ -44,7 +49,10 @@ addDecorator(story => {
 	return tale;
     }
 });
+*/
 
+
+/*
 addDecorator(withA11y);
 addDecorator(withKnobs);
 addDecorator(withCssResources);
@@ -62,7 +70,7 @@ addParameters({
         },
 		  ],
 });
-
+*/
 
 const req = require.context('../src/', true, /\.stories.ts$/);
 function loadStories() {
