@@ -1,4 +1,4 @@
-<mat-card fxLayout='column' fxFlex="1 1 auto" class="mat-card">
+<mat-card fxLayout='column' fxFlex="1 1 auto" >
 
   <img *ngIf="newsArticle.urlToImage" mat-card-image
        class="mat-card-image" src={{newsArticle.urlToImage}}
@@ -7,24 +7,23 @@
   <img *ngIf="!newsArticle.urlToImage" mat-card-image
        class="mat-card-image" src="../../assets/errorImg/cantLoadImg.png" alt="">
   
-  <mat-card-header class="hrader-top-to-bottom">
+  <mat-card-header >
     <mat-card-title class="title">
       {{newsArticle.title}}
     </mat-card-title>
       
-    <mat-card-subtitle class="subtitle" >
+    <mat-card-subtitle >
       {{newsArticle.source.name}}
     </mat-card-subtitle>
   </mat-card-header>
 
-  <mat-card-content class="mat-card-content">
+  <mat-card-content >
     <p>
       {{newsArticle.description}}
     </p>
   </mat-card-content>
   
-  <mat-card-actions 
-		    class="mat-action-content">
+  <mat-card-actions >
     <newscard-actions [data]='newsArticle.newsActionData'
 		      (onChanged)='_onChanged($event)'>
     </newscard-actions>
